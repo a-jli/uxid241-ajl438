@@ -1,5 +1,5 @@
 ## ABOUT
-An online cookbook backed by a database with an auth-gated admin area for adding, editing, and deleting recipes.
+This repository contains the cumulative final for IDM 232, an online cookbook web app backed by a database.
 
 ## AI use
-No AI used
+No AI used.
