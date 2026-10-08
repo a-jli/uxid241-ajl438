@@ -83,7 +83,7 @@
     <h3>Food Search</h3> 
     <form action="index.php" method = "GET"> 
         <label for="q"> Recipe name has: </label>
-        <input type= "search" id="q" name="q" value="<?= e($food_searched) ?>">
+        <input type= "search" id="q" name="q" value="<?= e($food_searched) ?>" required>
         <button type="submit">Search</button>
     </form>
 
