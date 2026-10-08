@@ -111,7 +111,7 @@
         <button type="submit">Submit</button>
     </form>
 
-    <?php if ($recipe_name && $email !== '' && $success === 'true') : ?>
+    <?php if ($success === true) : ?>
     <p>Recipe "<?=e($recipe_name); ?>" submitted by <?=e($email); ?>.</p>
     <?php else :
         foreach ($errors as $error) : ?>
