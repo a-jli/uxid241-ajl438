@@ -83,7 +83,7 @@
     <h3>Food Search</h3> 
     <form action="index.php" method = "GET"> 
         <label for="q"> Recipe name has: </label>
-        <input type= "search" id="q" name="q" value="">
+        <input type= "search" id="q" name="q" value="<?= e($food_searched) ?>">
         <button type="submit">Search</button>
     </form>
 
@@ -105,9 +105,9 @@
     <h3>Recipe Submission</h3>
     <form action="index.php" method="POST">
         <label for="name">Recipe Name: </label>
-        <input text="text" id="name" name="name" value="" required>
+        <input text="text" id="name" name="name" value="<?= e($recipe_name) ?>" required>
         <label for="email">Your Email: </label>
-        <input text="email" id="email" name="email" value="" required>
+        <input text="email" id="email" name="email" value="<?= e($email) ?>" required>
         <button type="submit">Submit</button>
     </form>
 
