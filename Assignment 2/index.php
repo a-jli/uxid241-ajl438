@@ -27,6 +27,7 @@
         'Rice and Fish'
     ];
 
+    $searcherrors = [];
 
     if ($food_searched !== '') { //if it isn't empty?
         foreach($recipes as $recipe) { // v set everything to lowercase for search 
@@ -34,6 +35,10 @@
                 $food_results[] = $recipe; //add recipes to results
             }
         }
+    }
+
+    if ($food_searched === '') {
+        $searcherrors[] = 'Search is required.';
     }
 
     // RECIPE SUBMIT
@@ -88,14 +93,22 @@
     </form>
 
     <?php if ($food_searched !== '') : ?> 
-    <p> <?=count($food_results); ?> result(s) for "<?= e($food_searched); ?>"</p>
-    <ul>
-        <?php foreach ($food_results as $recipe) : ?>
-            <li><?= e($recipe); ?></li>
-        <?php endforeach; ?>
-    </ul>
+        <p> <?=count($food_results); ?> result(s) for "<?= e($food_searched); ?>"</p>
+            <ul>
+                <?php foreach ($food_results as $recipe) : ?>
+                    <li><?= e($recipe); ?></li>
+                <?php endforeach; ?>
+            </ul>
+    <?php else :
+        foreach ($searcherrors as $searcherror) : ?>
+        <p><?= ($searcherror);?></p>
+    <?php endforeach; ?>
     <?php endif; ?>
+    
 
+
+
+    
 <!-- if query isn't empty, # of food results, (escaped)whatever searched
  make li for each result with the (escaped)recipe inside -->
  <hr />
