@@ -3,6 +3,12 @@
     var_dump($_GET);
     var_dump($_POST);
 
+    $config = require_once 'config.php';
+    myqli_report(mysqli report, strict(''));
+    $conn = mysqli_connect (
+        {host port dbname etc}
+    )
+
 <!DOCTYPE html>
 <html lang="en">
 <head> 
