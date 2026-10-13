@@ -5,22 +5,13 @@
 
     require 'config.php';
     
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-    function getRowNumber(mysqli $conn): void {
-        $result = mysqli_query($conn, 'SELECT COUNT(*) AS total FROM assignment_3');
-        $row = mysqli_fetch_assoc($result);
-        echo "Rows: " . $row['total'];   // should print 40
-    }
-
     $result = mysqli_query($conn, 'SELECT title, description from assignment_3');
-    $recipes = mysqli_fetch_all($result);
+    $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
    function e(string $value): string { 
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); 
     } 
 ?>
-W
 <!DOCTYPE html>
 <html lang="en">
 <head> 
@@ -29,14 +20,13 @@ W
     <title>UXID 241 Cookbook Assignment 3</title>
 </head>
 <body>
-    <h2>Row Number:</h2>
-    <?php getRowNumber($conn); ?>
-    <ul>
-        <?php 
-            foreach ($recipes as $recipe):?> <br>
-            <li><?php e($recipe('title')); ?></li> 
-        <?php endforeach; ?>
-    </ul>
+    <h2>Available Recipes:</h2>
+    <?php 
+        foreach ($recipes as $recipe):?>
+        <h3>Title:<?php e($recipe['title']); ?></h3> 
+        <h4>Description:<?php e($recipe['description']); ?></h4> 
+        <br>
+    <?php endforeach; ?>
 </body>
 </html>
 
