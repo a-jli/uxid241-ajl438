@@ -3,7 +3,7 @@
     var_dump($_GET);
     var_dump($_POST);
 
-    require 'config.php';
+    require 'database.php';
     
     $result = mysqli_query($conn, 'SELECT title, description from assignment_3');
     $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -12,6 +12,7 @@
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); 
     } 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head> 
