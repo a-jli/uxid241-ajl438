@@ -28,8 +28,6 @@
         <h3>Title: <?= e($recipe['title']) . '<br>'; ?></h3> 
         <h4>Description: <?= e($recipe['description']); ?></h4> 
     <?php endforeach; ?>
-
-     
 </body>
 </html>
 
