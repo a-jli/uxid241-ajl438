@@ -25,12 +25,6 @@
 
     <?php 
         foreach ($recipes as $recipe):?>
-        <h3>Title: <?php echo e($recipe['title']) . '<br>'; ?></h3> 
-        <h4>Description: <?php echo e($recipe['description']); ?></h4> 
-    <?php endforeach; ?>
-
-    <?php 
-        foreach ($recipes as $recipe):?>
         <h3>Title: <?= e($recipe['title']) . '<br>'; ?></h3> 
         <h4>Description: <?= e($recipe['description']); ?></h4> 
     <?php endforeach; ?>
