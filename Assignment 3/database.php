@@ -1,23 +1,24 @@
 <?php
 declare(strict_types=1);
 
+$config = require_once 'config.php';
+
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     try{
-          $conn = mysqli_connect(
-            $config['db_host'], 
-            $config['db_user'], 
-            $config['db_pass'], 
-            $config['db_name'],
-            (int) $config['db_port']
+        $conn = mysqli_connect(
+        $config['db_host'], 
+        $config['db_user'], 
+        $config['db_pass'], 
+        $config['db_name'],
+        (int) $config['db_port']
         );
+    mysqli_set_charset($conn, 'utf8mb4');
     } catch (mysqli_sql_exception $e) {
         http_response_code(500);
         exit('Connection failed: ' . $e->getMessage());
-    } //e hold exception object
+    } //$e holds exception object
    
-    mysqli_set_charset($conn, 'utf8mb4');
-    
     if($conn){
         echo"You are connected!<br />";
     }

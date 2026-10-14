@@ -5,7 +5,7 @@
 
     require 'database.php';
     
-    $result = mysqli_query($conn, 'SELECT title, description from assignment_3');
+    $result = mysqli_query($conn, 'SELECT title, description, step1 from assignment_3');
     $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
    function e(string $value): string { 
@@ -22,12 +22,20 @@
 </head>
 <body>
     <h2>Available Recipes:</h2>
+
     <?php 
         foreach ($recipes as $recipe):?>
-        <h3>Title:<?php e($recipe['title']); ?></h3> 
-        <h4>Description:<?php e($recipe['description']); ?></h4> 
-        <br>
+        <h3>Title: <?php echo e($recipe['title']) . '<br>'; ?></h3> 
+        <h4>Description: <?php echo e($recipe['description']); ?></h4> 
     <?php endforeach; ?>
+
+    <?php 
+        foreach ($recipes as $recipe):?>
+        <h3>Title: <?= e($recipe['title']) . '<br>'; ?></h3> 
+        <h4>Description: <?= e($recipe['description']); ?></h4> 
+    <?php endforeach; ?>
+
+     
 </body>
 </html>
 
