@@ -84,6 +84,7 @@
             <li>Step 5:<?= e($recipe['step5']); ?></li>
             <li>Step 6:<?= e($recipe['step6']); ?></li>
         </ul>
+        <hr>
     <?php endforeach; ?>
 </body>
 </html>
