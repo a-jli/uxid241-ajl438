@@ -71,7 +71,9 @@
     <?php foreach ($recipes as $recipe):?>
         <h3>Title: <?= e($recipe['title']) . '<br>'; ?></h3> 
         <h3><?= e($recipe['subtitle']) . '<br>'; ?></h3> 
-        <h4>Category:<?= e($recipe['category_id']); ?></p> 
+        <!-- Undefined array key "category"? -->
+        <!-- tried doing $row['category'] but that didn't do anything -->
+        <h4>Category:<?= e($recipe['category']); ?></p> 
         <p><?= e($recipe['calories']);?>cal</p>
         <p><?= e($recipe['time']); ?> min</p>
         <h4>Description: <?= e($recipe['description']); ?></h4>
