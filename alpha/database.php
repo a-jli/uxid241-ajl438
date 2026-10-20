@@ -6,8 +6,6 @@ $config = require_once 'config.php';
 //throw an exception if something goes wrong
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-
-
 try{
     $conn = mysqli_connect( //mysqli_connect takes host, un, pw, db name
     $config['db_host'], 

@@ -10,32 +10,32 @@
     } 
 
     function recipes_with_category(mysqli $conn): array {
-    $sql = 'SELECT cookbook_recipes.title, cookbook_categories.title AS category
+    $sql = 'SELECT cookbook_recipes.title, cookbook_categories.name AS category
             FROM cookbook_recipes
             INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
-            ORDER BY cookbook_categories.title, cookbook_recipes.title';
+            ORDER BY cookbook_categories.name, cookbook_recipes.title';
     return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
     }
 
     foreach (recipes_with_category($conn) as $row) {
-        echo'<p>{$row['category']}:{$row['title']</p>'; // syntax error, unexpected identifier "category", expecting "," or ";"??
+        echo"<p>{$row['category']}:{$row['title']}</p>"; 
     }
 
-    //category counter
-    // function category_count(mysqli $conn){
-    //     $sql = 'SELECT cookbook_categories.title, COUNT(*) AS cookbook_recipes.count FROM recipes_with_category
-    //     INNER JOIN cookbook_categories ON cookbook_recipes.category_id = categories.id
-    //     GROUP BY cookbook_categories.title
-    //     ORDER BY cookbook_recipes.count DESC';
-    //     return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
-    // }
+    function category_count(mysqli $conn){
+        $sql = 'SELECT cookbook_categories.name, COUNT(*) AS recipes_count 
+        FROM cookbook_recipes
+        INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
+        GROUP BY cookbook_categories.name
+        ORDER BY recipes_count DESC';
+        return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+    }
 
-    //test
-    // foreach (category_count ($conn) as $row){
-    //     echo '<p>{$row['name']}:{$rw['recipe_count']}</p>';
-    //     $sql = 'INSERT INTO ingredients'
-    // }
+    foreach (category_count($conn) as $row) {
+        echo"<p>{$row['name']}:{$row['recipes_count']}</p>"; 
+    }
 
+    var_dump($row);
+    
     //transaction
     // function add_ingredients(mysqli $conn, int $recipe_id, array $titles {
     //     $sql = 'INSERT INTO ingredients (recipe_id, title) VALUES (?, ?)';
@@ -66,14 +66,14 @@
 </head>
 <body>
 <hr>
-    <h2>Available Recipes:</h2>
+    <h1>Available Recipes:</h1>
+    <hr>
     <?php foreach ($recipes as $recipe):?>
         <h3>Title: <?= e($recipe['title']) . '<br>'; ?></h3> 
         <h3><?= e($recipe['subtitle']) . '<br>'; ?></h3> 
-        <!-- this outputs the category # and not the category title, and 'category' gives an error -->
         <h4>Category:<?= e($recipe['category_id']); ?></p> 
-        <p>Calories: <?= e($recipe['calories']); ?></p>
-        <p>Time: <?= e($recipe['time']); ?> min</p>
+        <p><?= e($recipe['calories']);?>cal</p>
+        <p><?= e($recipe['time']); ?> min</p>
         <h4>Description: <?= e($recipe['description']); ?></h4>
         <p>Ingredients: <?= e($recipe['ingredients']); ?></p> 
         <ul>
@@ -92,7 +92,7 @@
 
 
 <!-- 
-- [] A database schema as a checked-in SQL file (e.g., schema.sql) or migration. At minimum a recipes table with a primary key 
+- [DONE] A database schema as a checked-in SQL file (e.g., schema.sql) or migration. At minimum a recipes table with a primary key 
     and columns that fit the domain (title, and at least a few of: description, servings, prep time, category, created date). 
     A categories table with a foreign key from recipes is encouraged but not required at alpha.
 

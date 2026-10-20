@@ -1,3 +1,5 @@
 <?php
-//fill later
+declare(strict_types=1);
+
+//?
 ?>
