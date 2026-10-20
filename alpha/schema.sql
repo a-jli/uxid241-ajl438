@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2026 at 08:46 PM
+-- Generation Time: Oct 20, 2026 at 11:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `idm232_db`
 --
+CREATE DATABASE IF NOT EXISTS `idm232_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `idm232_db`;
 
 -- --------------------------------------------------------
 
