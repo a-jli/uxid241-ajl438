@@ -6,7 +6,7 @@ This repository contains the cumulative final for IDM 232, an online cookbook we
 1. Create database
 2. Load schema.sql
 3. Copy config.example.php to config.php and fill in credentials.
-4. Place the project inside your 'htdocs' folder and open it through localhost with XAMPP or MAMP running
+4. Place the project inside your 'htdocs' folder and open it through localhost with XAMPP/MAMP running
 
 ## AI use
 No AI used.
