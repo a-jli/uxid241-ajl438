@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2026 at 11:52 PM
+-- Generation Time: Oct 20, 2026 at 08:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,14 +57,14 @@ INSERT INTO `assignment_3` (`id`, `title`, `description`, `ingredients`, `step1`
 
 CREATE TABLE `cookbook_categories` (
   `id` int(11) NOT NULL,
-  `title` varchar(120) NOT NULL
+  `name` varchar(120) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `cookbook_categories`
 --
 
-INSERT INTO `cookbook_categories` (`id`, `title`) VALUES
+INSERT INTO `cookbook_categories` (`id`, `name`) VALUES
 (1, 'Vegetarian'),
 (2, 'Fish'),
 (3, 'Poultry'),
