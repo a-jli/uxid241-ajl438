@@ -74,7 +74,7 @@
     <h1>Available Recipes:</h1>
     <hr>
     <?php foreach ($recipes as $recipe):?>
-        <h3>Title: <?= e($recipe['title']) . '<br>'; ?></h3> 
+        <h3><?= e($recipe['title']) . '<br>'; ?></h3> 
         <h3><?= e($recipe['subtitle']) . '<br>'; ?></h3> 
         <p><?= e($recipe['category']); ?></p> 
         <p><?= e($recipe['calories']);?>cal</p>
