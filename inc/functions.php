@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-echo('functions loaded');
-
 var_dump($_GET);
 var_dump($_POST);
 
@@ -24,11 +22,14 @@ function get_all_recipes (mysqli $conn):array {
     return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
 }
 
-// function get_recipe (mysqli $conn, int $id):?array {
-//     $result = mysqli_execute_query ($conn, $sql) 
-//     'SELECT * FROM recipes WHERE $id=1';
-// }
-
+// The function takes the mysqli connection and an int id, 
+// and returns either an associative array or null. 
+// mysqli_fetch_assoc() returns null when nothing matches, 
+function get_recipe (mysqli $conn, int $id):?array {
+  $sql = 'SELECT * FROM recipes WHERE id = ?';
+  $result = mysqli_execute_query($conn, $sql, [$id]);
+  return mysqli_fetch_assoc($result);
+}
 
                                                                           //rename categories.name to category, less clunky 
   $result = mysqli_query($conn, 'SELECT cookbook_recipes.title, subtitle, cookbook_categories.name AS category, description, servings, time, calories, ingredients, steps, images, step3, step4, step5, step6
@@ -39,18 +40,18 @@ function get_all_recipes (mysqli $conn):array {
   $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
   //how many of each category
-  function category_count(mysqli $conn){
-      $sql = 'SELECT cookbook_categories.name, COUNT(*) AS recipes_count 
-      FROM cookbook_recipes
-      INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
-      GROUP BY cookbook_categories.name
-      ORDER BY recipes_count DESC';
-      return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
-  }
+//   function category_count(mysqli $conn){
+//       $sql = 'SELECT cookbook_categories.name, COUNT(*) AS recipes_count 
+//       FROM cookbook_recipes
+//       INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
+//       GROUP BY cookbook_categories.name
+//       ORDER BY recipes_count DESC';
+//       return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+//   }
   
-  foreach (category_count($conn) as $row) {
-      echo"<p>{$row['name']}:{$row['recipes_count']}</p>"; 
-  }
+//   foreach (category_count($conn) as $row) {
+//       echo"<p>{$row['name']}:{$row['recipes_count']}</p>"; 
+//   }
 
 
 ?>

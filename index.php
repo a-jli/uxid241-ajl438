@@ -80,7 +80,7 @@
                     <!--steps -->
                     <h2>Ingredients:</h2>
                     <?php 
-                    // why is the explode not working i checked and the line break should be 
+                    //explode not working, i checked and the line break should be 
                     //\r\n to my understanding + that is how it displays in the schema
                         $ingredients = explode ("\r\n", $recipe['ingredients']);?>
                         <?php foreach ($ingredients as $ingredient):?>
