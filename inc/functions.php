@@ -33,11 +33,16 @@ function get_recipe (mysqli $conn, int $id):?array {
   $sql = 'SELECT * FROM cookbook_recipes WHERE id = ?';
   $result = mysqli_execute_query($conn, $sql, [$id]);
   return mysqli_fetch_assoc($result);
+
 }
                                                          //rename categories.name to category, less clunky 
-$result = mysqli_query($conn, 'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle, cookbook_categories.name AS category, description, servings, time, calories, ingredients, steps, images
-FROM cookbook_recipes
-INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id');
+$result = mysqli_query($conn, 'SELECT cookbook_recipes.id, 
+    cookbook_recipes.title, 
+    subtitle, 
+    cookbook_categories.name 
+    AS category, description, servings, time, calories, ingredients, steps, images
+    FROM cookbook_recipes
+    INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id');
 // join - query that reads matching rows from both tables together, inner means we only get rows where the match exists on both sides
 
 

@@ -1,8 +1,9 @@
 <?php
     declare(strict_types=1);
     require 'inc/database.php';
-    require 'inc/functions.php';
-    $current_id = (int) get_value('id')
+    require 'inc/functions.php'; 
+    $id = (int) get_value('id');
+    $recipe = get_recipe($conn, $id);
 ?>
 
 <!DOCTYPE html>
@@ -18,32 +19,32 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a href="index.php"><h1>IDM 232 Cookbook</h2></li></a>
+            <a href="index.php"><h1>IDM 232 Cookbook</h1></a>
             <ul>
                 <li><a href="index.php">HOME</a></li>
                 <li><a href="index.php">ALL RECIPES</a></li>
                 <li><a href="index.php">SUPRPISE ME</a></li>
                 <li><a href="index.php">HELP</a></li>
                 <li><a href="index.php">LOGIN</a></li>
-                <li><a href="recipe.php">Recipe Template!</a></li>
             </ul>
         </div>
     </nav>
     <main>
         <div class="recipe-focus">
-            <?php             
-            foreach ($recipes as $recipe) 
-            $recipe_id = $recipe['id'];
-            echo ('$recipe[id] is '. ($recipe['id'].', ' .'"'.$recipe_id).'"'.'<br>');
-            echo ('$current id is '. $current_id);
-            if ($recipe_id == $current_id):?>
+            <?php if ($recipe === null): ?>
+                <p>Recipe not found.</p>
+            <?php else: ?>
                 <div class="recipe-wrapper"> 
                     <div class="recipe-header">
                         <div class="horizontal">
                             <div class="vertical">
                                 <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
                                 <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4>
-                            <div class="recipe-wrapper-pill">
+                                <!--calories and time are integer in the db, and displayed fine when I was
+                                looping through recipes earlier. Unsure why they break now? 
+                                Undefined array key "category", $value and $categories both ask for
+                                string but null is given (if i delete categories, int is given.) -->
+                                <div class="recipe-wrapper-pill">
                                 <p class="category"><?= e($recipe['category']); ?></p> 
                                 <p class="calories"><?= e($recipe['calories']);?>cal</p>
                                 <p class="time"><?= e($recipe['time']); ?> min</p>
@@ -53,8 +54,6 @@
                             <img class="hero-image" src="assets/images/<?= e(end($images)) ?>" alt="">
                         </div>
                     </div>
-                
-
                     <div class="overview-ingredients">
                         <div>
                             <h2>Overview:</h2>
@@ -80,10 +79,8 @@
                                 <p><?= e($step) ?></p>
                             </div>
                         <?php endforeach; ?>
-                        <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
                     </div>
-            <?php endif; ?>    
-        </div>  
+                <?php endif; ?>
         </div>   
     </main>
 </body>

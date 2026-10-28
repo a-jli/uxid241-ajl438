@@ -55,3 +55,102 @@
   }
 ?>
 
+
+<?php             
+            foreach ($recipes as $recipe) 
+            $recipe_id = $recipe['id'];
+            echo ('$recipe[id] is '. ($recipe['id'].', ' .'"'.$recipe_id).'"'.'<br>');
+            echo ('$current id is '. $current_id);
+            if ($recipe_id == $current_id):?>
+                <div class="recipe-wrapper"> 
+                    <div class="recipe-header">
+                        <div class="horizontal">
+                            <div class="vertical">
+                                <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                                <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4>
+                            <div class="recipe-wrapper-pill">
+                                <p class="category"><?= e($recipe['category']); ?></p> 
+                                <p class="calories"><?= e($recipe['calories']);?>cal</p>
+                                <p class="time"><?= e($recipe['time']); ?> min</p>
+                            </div>
+                            </div>
+                            <?php $images = explode ('*', $recipe['images']);?>
+                            <img class="hero-image" src="assets/images/<?= e(end($images)) ?>" alt="">
+                        </div>
+                    </div>
+                    <div class="overview-ingredients">
+                        <div>
+                            <h2>Overview:</h2>
+                            <p><?= e($recipe['description'])?></p>
+                        </div>
+                        <div>
+                            <h2>Ingredients:</h2>
+                            <ul>
+                                <?php 
+                                    $ingredients = explode ("*", $recipe['ingredients']);?>
+                                <?php foreach ($ingredients as $ingredient):?>
+                                    <li><?=e($ingredient)?></li>
+                                <?php endforeach; ?>
+                            </ul>                          
+                        </div>
+                    </div>
+                    <hr>
+                    <?php $steps = explode ('*', $recipe['steps']);?>
+                    <?php $images = explode ('*', $recipe['images']);?>
+                        <?php foreach ($steps as $i => $step): ?>
+                            <div class="steps-wrapper">
+                                <img src="assets/images/<?= e($images[$i]) ?>" alt="">
+                                <p><?= e($step) ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                        <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
+                    </div>
+            <?php endif; ?>    
+        </div>  
+        <div class="recipe-grid">
+            <?php             
+            foreach ($recipes as $recipe) :?>
+                <div class="recipe-wrapper"> 
+                    <div class="recipe-header">
+                        <div class="horizontal">
+                            <div class="vertical">
+                                <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                                <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4>
+                            <div class="recipe-wrapper-pill">
+                                <p class="category"><?= e($recipe['category']); ?></p> 
+                                <p class="calories"><?= e($recipe['calories']);?>cal</p>
+                                <p class="time"><?= e($recipe['time']); ?> min</p>
+                            </div>
+                            </div>
+                            <?php $images = explode ('*', $recipe['images']);?>
+                            <img class="hero-image" src="assets/images/<?= e(end($images)) ?>" alt="">
+                        </div>
+                    </div>
+                    <div class="overview-ingredients">
+                        <div>
+                            <h2>Overview:</h2>
+                            <p><?= e($recipe['description'])?></p>
+                        </div>
+                        <div>
+                            <h2>Ingredients:</h2>
+                            <ul>
+                                <?php 
+                                    $ingredients = explode ("*", $recipe['ingredients']);?>
+                                <?php foreach ($ingredients as $ingredient):?>
+                                    <li><?=e($ingredient)?></li>
+                                <?php endforeach; ?>
+                            </ul>                          
+                        </div>
+                    </div>
+                    <hr>
+                    <?php $steps = explode ('*', $recipe['steps']);?>
+                    <?php $images = explode ('*', $recipe['images']);?>
+                        <?php foreach ($steps as $i => $step): ?>
+                            <div class="steps-wrapper">
+                                <img src="assets/images/<?= e($images[$i + 1]) ?>" alt="">
+                                <p><?= e($step) ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+            <?php endforeach; ?>    
+

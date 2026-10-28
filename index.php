@@ -3,9 +3,9 @@
     require 'inc/database.php';
     require 'inc/functions.php';
 
-    
-
-
+    // $recipes = get_all_recipes($conn);
+    // this doesnt do anything? the recipe stuff theyre getting is from
+    //$recipes = mysqli_fetch_all($result, MYSQLI_ASSOC); and not get all recipes...
 ?>
 
 <!DOCTYPE html>
@@ -24,11 +24,10 @@
             <a href="index.php"><h1>IDM 232 Cookbook</h2></li></a>
             <ul>
                 <li><a href="index.php">HOME</a></li>
-                <li><a href="index.php">ALL RECIPES</a></li>
-                <li><a href="index.php">SUPRPISE ME</a></li>
-                <li><a href="index.php">HELP</a></li>
-                <li><a href="index.php">LOGIN</a></li>
-                <li><a href="recipe.php">Recipe Template!</a></li>
+                <li><a href="all-recipes.php">ALL RECIPES</a></li>
+                <li><a href="surprise.php">SUPRPISE ME</a></li>
+                <li><a href="help.php">HELP</a></li>
+                <li><a href="login.php">LOGIN</a></li>
             </ul>
         </div>
     </nav>
@@ -63,15 +62,16 @@
                         <div class="recipe-header-img">
                             <img src="assets/images/<?= e(end($images)) ?>" alt="">
                         </div>
-                        <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
-                        <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
-                        <div class="recipe-wrapper-pill">
-                            <p class="category"><?= e($recipe['category']); ?></p> 
-                            <p class="calories"><?= e($recipe['calories']);?>cal</p>
-                            <p class="time"><?= e($recipe['time']); ?> min</p>
+                        <div class="non-img">
+                            <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                            <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
+                            <div class="recipe-wrapper-pill">
+                                <p class="category"><?= e($recipe['category']); ?></p> 
+                                <p class="calories"><?= e($recipe['calories']);?>cal</p>
+                                <p class="time"><?= e($recipe['time']); ?> min</p>
+                            </div>
                         </div>
                     </div>  
-
                     <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
                 </div>
             <?php endforeach; ?>      

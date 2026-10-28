@@ -4,6 +4,14 @@
     color: #0a0907;
 }
 
+:root {
+     --off-white: rgb(228, 222, 222);
+     --off-black:  #0a0907;
+     --green: rgb(209, 206, 191);
+     --yellow: rgb(255, 187, 0);
+     --orange: rgb(206, 102, 27);
+     --darker-orange: rgb(164, 57, 18); 
+}
 
 nav {
     font-family: Arial, Helvetica, sans-serif;
@@ -12,7 +20,8 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color:rgb(206, 102, 27);
+    background-color:var(--orange);
+    color: var(--darker-orange);
     .nav-wrapper {
         display: flex;
         flex-direction: row;
@@ -31,7 +40,7 @@ nav {
         list-style-type:none;
         justify-content: space-between;
          a:hover {
-        text-decoration: underline;
+            text-decoration: underline;
         }
     }
     li {
@@ -58,7 +67,7 @@ h1, h2, h3, h4, p {
 hr {
     width: 100%;
     border: none;
-    border-top: 0.25rem solid rgb(255, 187, 0)
+    border-top: 0.25rem solid var(--yellow);
 }
 
 main {
@@ -67,7 +76,7 @@ main {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: rgb(107, 95, 28);
+    background-color: var(--green);
 }
 
 .search-filter-wrapper {
@@ -88,28 +97,29 @@ main {
     text-decoration: none;
     border-radius: 0.5rem;
     padding: 1rem;
-    background-color: rgb(255, 187, 0);
+    background-color: var(--yellow);
     transition: 200ms ease-out;
     font-weight: bolder;
-    width: 10rem;
+    width: 80%;
     text-align: center;
+    margin-bottom: 1rem;
 }
 
 .view-recipe-btn:hover {
-    background-color: rgb(206, 102, 27);
+    background-color: var(--orange);
 }
 
 .view-recipe-btn:active {
-    width: 9.8rem;
-    background-color: rgb(164, 57, 18);    
-    color: rgb(228, 222, 222);
+    width: 75%;
+    background-color: var(--darker-orange);    
+    color: var(--off-white);
 }
 
 select, input, button{
     border: none;
     padding: 0.25rem 1rem 0.25rem 1rem;
     border-radius: 0.5rem;
-    background-color: rgb(228, 222, 222);
+    background-color: var(--off-white);
 }
 
 form {
@@ -123,17 +133,17 @@ form {
     button {
         margin: 0;
         border-radius: 0rem 0.5rem 0.5rem 0;
-        background-color: rgb(255, 187, 0);
+        background-color: var(--yellow);
         transition: 200ms ease-out;
     }
     button:hover {
         cursor: pointer;
-        background-color: rgb(206, 102, 27);
+        background-color: var(--orange);
     }
     button:active {
         cursor: pointer;
         color: white;
-        background-color: rgb(164, 57, 18);
+        background-color: var(--darker-orange);
     }
 }
 
@@ -145,8 +155,11 @@ form {
     width: 80%;
     gap: 1rem;
     padding: 1rem;
+    overflow: hidden;
     .recipe-wrapper {
-        padding: 0.5rem;
+        padding: 0rem;
+        flex: 1;
+        border-radius: 0.5rem; 
         .title {
             font-size: 1.5rem;
             height: 100%;
@@ -154,22 +167,31 @@ form {
         .subtitle {
             font-size: 1.2rem;
         }
-        flex: 1;
         /* height: 100%; */
     }
     .recipe-header {
         height: 100%;
+        padding: 0;
         img {
             width: 100%;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
+            border-radius: 0rem;
+            /* margin-bottom: 1rem; */
         }
     }
-
     .hero-image {
         width: 100%;
         height: 2rem;
     }
+}
+
+.title, .subtitle {
+    height: 100%;
+}
+.non-img {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
 }
 
 .horizontal {
@@ -187,12 +209,14 @@ form {
 
 .recipe-wrapper {
     width: 100%;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(228, 222, 222);
+    background-color: var(--off-white);
     padding: 1rem;
     border-radius: 0.5rem;
+    overflow: hidden;
     filter: drop-shadow(-2px 2px 0px rgba(17, 42, 26, 0.25));
     transition: 200ms ease-out;
     gap: 1rem;
@@ -229,13 +253,16 @@ form {
     width: 80%;
     gap: 1rem;
     padding: 1rem;
+    .recipe-header {
+        border-radius: 0.5rem;
+    }
 }
 
 .recipe-header {
     padding: 1rem;
-    border-radius: 0.5rem;
+    
     width: 100%;
-    background-color: rgb(206, 102, 27);
+    background-color: var(--orange);
     display: flex;
     flex-direction: column;
     gap: 0rem;
@@ -260,9 +287,10 @@ form {
         gap: 1rem;
     }
     .time, .calories, .category {
-        background-color: rgb(255, 187, 0);
+        background-color: var(--yellow);
         padding: 0.5rem;
         border-radius: 0.5rem;
+        font-size: 0.75rem;
         font-weight: bold;
         width: auto;
     }
