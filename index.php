@@ -3,19 +3,9 @@
     require 'inc/database.php';
     require 'inc/functions.php';
 
-    function value_trim(string $key): string {
-        return trim($_GET[$key] ?? '');
-    }
-    $food_searched = value_trim('q'); // set query variable to trimmed string 
-    $food_results = []; // empty array for results to fill
     
-    if ($food_searched !== '') { //if it isn't empty?
-        foreach($recipes as $recipe) { // v set everything to lowercase for search 
-            if (str_contains(strtolower(e($recipe['title'])), strtolower($food_searched))) {
-                $food_results[] = $recipe; //add recipes to results
-            }
-        }
-    }    
+
+
 ?>
 
 <!DOCTYPE html>
@@ -77,32 +67,28 @@
                             <p class="time"><?= e($recipe['time']); ?> min</p>
                         </div>
                     </div>
-                    <!--steps -->
+                    <h2>Overview:</h2>
+                    <p><?= e($recipe['description'])?></p>
                     <h2>Ingredients:</h2>
+                    <ul>
                     <?php 
-                    //explode not working, i checked and the line break should be 
-                    //\r\n to my understanding + that is how it displays in the schema
-                        $ingredients = explode ("\r\n", $recipe['ingredients']);?>
+                        $ingredients = explode ("*", $recipe['ingredients']);?>
                         <?php foreach ($ingredients as $ingredient):?>
                         <li><?=e($ingredient)?></li>
                     <?php endforeach; ?>
-                    <h2>Steps:</h2>
-                    <div class="steps-wrapper">
-                        <?php 
-                            $steps = explode ('*', $recipe['steps']);?>
-                            <ul>
-                                <?php foreach ($steps as $step):?>
-                                <li><?=e($step) ?></li>
-                                <?php endforeach ?>
-                            </ul>
-                        <!-- images -->
-                        <?php 
-                            $images = explode ('*', $recipe['images']);?>
-                            <?php foreach ($images as $image):?>
-                            <img src="assets/images/<?=e($image)?>">
-                        <?php endforeach; ?>
+                    </ul>
+                    <!-- steps redo-->
+                    <?php $steps = explode ('*', $recipe['steps']);?>
+                    <?php $images = explode ('*', $recipe['images']);?>
+                     <?php foreach ($steps as $i => $step): ?>
+                        <div class="steps-wrapper">
+                            <img src="assets/images/<?= e($images[$i + 1]) ?>" alt="">
+                            <p><?= e($step) ?></p>
+                        </div>
+                     <?php endforeach; ?>
+                    <!--steps -->
+                        <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
                     </div>
-                </div>
             <?php endforeach; ?>    
         </div>  
         </div>   

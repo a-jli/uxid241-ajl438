@@ -39,4 +39,19 @@
     foreach (recipes_with_category($conn) as $row) {
         echo"<p>{$row['category']}:{$row['title']}</p>"; 
     }
+
+//   how many of each category
+  function category_count(mysqli $conn){
+      $sql = 'SELECT cookbook_categories.name, COUNT(*) AS recipes_count 
+      FROM cookbook_recipes
+      INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
+      GROUP BY cookbook_categories.name
+      ORDER BY recipes_count DESC';
+      return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+  }
+  
+  foreach (category_count($conn) as $row) {
+      echo"<p>{$row['name']}:{$row['recipes_count']}</p>"; 
+  }
 ?>
+

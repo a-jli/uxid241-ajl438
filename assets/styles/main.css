@@ -49,6 +49,11 @@ nav {
 
 }
 
+h1, h2, h3, h4, p {
+    width: 100%;
+    margin: 0;
+}
+
 main {
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
@@ -64,9 +69,33 @@ main {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    * {
+        margin-top: 0.25rem;
+    }
     div {
         height: 100%;
     }
+}
+
+.view-recipe-btn {
+    text-decoration: none;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: rgb(255, 187, 0);
+    transition: 200ms ease-out;
+    font-weight: bolder;
+    width: 10rem;
+    text-align: center;
+}
+
+.view-recipe-btn:hover {
+    background-color: rgb(206, 102, 27);
+}
+
+.view-recipe-btn:active {
+    width: 9.8rem;
+    background-color: rgb(164, 57, 18);    
+    color: rgb(228, 222, 222);
 }
 
 select, input, button{
@@ -112,17 +141,25 @@ form {
 
 .recipe-wrapper {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: rgb(228, 222, 222);
     padding: 1rem;
     border-radius: 0.5rem;
     filter: drop-shadow(-2px 2px 0px rgba(17, 42, 26, 0.25));
     transition: 200ms ease-out;
+    gap: 1rem;
+    ul {
+        width: 100%;
+    }
 }
 
 
 .recipe-header {
     padding: 1rem;
     border-radius: 0.5rem;
+    width: 100%;
     background-color: rgb(206, 102, 27);
     display: flex;
     flex-direction: column;
@@ -151,6 +188,7 @@ form {
         padding: 0.5rem;
         border-radius: 0.5rem;
         font-weight: bold;
+        width: auto;
     }
 }
 
@@ -158,12 +196,14 @@ form {
 
 .steps-wrapper{
     display: flex;
-    flex-direction: column;
-    gap: 1;
-    li {
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    p {
         width: 100%;
     }
     img {
-        width: 100%;
+        width: 30%;
+        object-fit: cover;
     }
 }
