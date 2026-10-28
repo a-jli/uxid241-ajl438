@@ -7,6 +7,7 @@
 
 nav {
     font-family: Arial, Helvetica, sans-serif;
+    padding: 2rem 1rem 1rem 1rem;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -52,6 +53,12 @@ nav {
 h1, h2, h3, h4, p {
     width: 100%;
     margin: 0;
+}
+
+hr {
+    width: 100%;
+    border: none;
+    border-top: 0.25rem solid rgb(255, 187, 0)
 }
 
 main {
@@ -131,12 +138,51 @@ form {
 }
 
 .recipes-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     flex-direction: row;
     flex-wrap: wrap;
     width: 80%;
     gap: 1rem;
     padding: 1rem;
+    .recipe-wrapper {
+        padding: 0.5rem;
+        .title {
+            font-size: 1.5rem;
+            height: 100%;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+        }
+        flex: 1;
+        /* height: 100%; */
+    }
+    .recipe-header {
+        height: 100%;
+        img {
+            width: 100%;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+    }
+
+    .hero-image {
+        width: 100%;
+        height: 2rem;
+    }
+}
+
+.horizontal {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical {
+    width: 100%;
+    display: flex;
+    flex-direction: column;   
+    margin-right: 1rem;
 }
 
 .recipe-wrapper {
@@ -155,6 +201,35 @@ form {
     }
 }
 
+.hero-image {
+    max-height: 200px;
+    width: fit-content;
+    overflow: auto;
+    border-radius: 0.5rem;
+    object-fit: cover;
+}
+
+.overview-ingredients {
+    display: flex;
+    flex-direction: row;
+    * {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    img {
+        height: 50%;
+    }
+}
+
+.recipe-focus {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    gap: 1rem;
+    padding: 1rem;
+}
 
 .recipe-header {
     padding: 1rem;
@@ -181,6 +256,7 @@ form {
     .recipe-wrapper-pill {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         gap: 1rem;
     }
     .time, .calories, .category {
@@ -203,7 +279,43 @@ form {
         width: 100%;
     }
     img {
-        width: 30%;
+        width: 40%;
         object-fit: cover;
+    }
+}
+
+
+@media screen and (max-width: 1600px) {
+    .recipes-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .recipes-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .steps-wrapper {
+        flex-direction: column;
+        img {
+            width: 100%;
+        }
+
+    }
+}
+
+@media screen and (max-width: 820px) {
+    .recipes-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .recipes-grid {
+        display: flex;
+        flex-direction: column;
     }
 }
