@@ -40,10 +40,9 @@
                             <div class="vertical">
                                 <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
                                 <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4>
-                                <!--calories and time are integer in the db, and displayed fine when I was
-                                looping through recipes earlier. Unsure why they break now? 
-                                Undefined array key "category", $value and $categories both ask for
-                                string but null is given (if i delete categories, int is given.) -->
+                                <!--calories and time are integers in the db, and displayed fine when I was
+                                looping through recipes earlier. Unsure why they break now? $value asks for
+                                string but int is given?) -->
                                 <div class="recipe-wrapper-pill">
                                 <p class="category"><?= e($recipe['category']); ?></p> 
                                 <p class="calories"><?= e($recipe['calories']);?>cal</p>
