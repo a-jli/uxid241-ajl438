@@ -45,8 +45,8 @@
                                 string but int is given?) -->
                                 <div class="recipe-wrapper-pill">
                                 <p class="category"><?= e($recipe['category']); ?></p> 
-                                <p class="calories"><?= e($recipe['calories']);?>cal</p>
-                                <p class="time"><?= e($recipe['time']); ?> min</p>
+                                <p class="calories"><?= (string) $recipe['calories'];?>cal</p> 
+                                <p class="time"><?= (string) $recipe['time']; ?> min</p>
                             </div>
                             </div>
                             <?php $images = explode ('*', $recipe['images']);?>
