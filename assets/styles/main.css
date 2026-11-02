@@ -22,12 +22,6 @@ nav {
     align-items: center;
     background-color:var(--orange);
     color: var(--darker-orange);
-    .nav-wrapper {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        width: 80%;   
-    }
     h1 {
         color: white;
         font-size: 2.5rem;
@@ -57,6 +51,12 @@ nav {
         color: white;
     }
 
+}
+.nav-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 80%;   
 }
 
 h1, h2, h3, h4, p {
@@ -330,7 +330,6 @@ form {
         img {
             width: 100%;
         }
-
     }
 }
 
@@ -339,11 +338,35 @@ form {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .nav-wrapper {
+        flex-direction: column;
+    }
+
+    .search-filter-wrapper {
+        flex-direction: column;
+        color: red;
+        select {
+            width: 100%;
+        }
+    }
 }
 
 @media screen and (max-width: 760px) {
     .recipes-grid {
         display: flex;
         flex-direction: column;
+    }
+
+    nav {
+        align-items: center;
+            ul {
+            flex-direction: column;
+            padding: 0;
+            li {
+                width: 100%;
+                text-align: left;
+            }
+        }
     }
 }

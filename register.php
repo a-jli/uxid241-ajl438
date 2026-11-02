@@ -1,6 +1,15 @@
 <?php
     declare(strict_types=1);
-    $conn = require 'inc/database.php';
+    require 'inc/database.php';
+    //^ 
+    //$conn =  require 'inc/database.php'; gave this error:
+    //Fatal error: Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of 
+    // type mysqli, int given in C:\xampp\htdocs\uxid241-ajl438\inc\functions.php:43 
+    // Stack trace: #0 C:\xampp\htdocs\uxid241-ajl438\inc\functions.php(43): 
+    // mysqli_query(1, 'SELECT cookbook...') #1 
+    // C:\xampp\htdocs\uxid241-ajl438\register.php(5): 
+    // require('C:\\xampp\\htdocs...') #2 {main} thrown in 
+    // C:\xampp\htdocs\uxid241-ajl438\inc\functions.php on line 43
     require 'inc/functions.php'; 
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -23,24 +32,15 @@
         $conn,
         'INSERT INTO users (email, password_hash) VALUES (?, ?)',
         [$email, $hash]
+        // Warning: Undefined variable $email in C:\xampp\htdocs\uxid241-ajl438\register.php on line 33
+        // Warning: Undefined variable $hash in C:\xampp\htdocs\uxid241-ajl438\register.php on line 33
     );
     } catch (mysqli_sql_exception $e) {
-    // Duplicate email, or another insert failure.
     $error = 'That email is already registered.';
     }
-
 ?>
 
 
-<!-- array(0) { } array(0) { }
-Fatal error: Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) 
-must be of type mysqli, int given in C:\xampp\htdocs\uxid241-ajl438\inc\functions.php:43 
-Stack trace: #0 C:\xampp\htdocs\uxid241-ajl438\inc\functions.php(43): 
-mysqli_query(1, 'SELECT cookbook...') #1 C:\xampp\htdocs\uxid241-ajl438\register.php(4): 
-require('C:\\xampp\\htdocs...') #2 {main} thrown in 
-C:\xampp\htdocs\uxid241-ajl438\inc\functions.php on line 43 -->
-
-<!-- ???? -->
 
 <!DOCTYPE html>
 <html lang="en">

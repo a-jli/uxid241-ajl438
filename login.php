@@ -23,9 +23,11 @@
 
             header("Location: admin/index.php");
             exit;
+        } else {
+            $error = 'invalid email/password';  
         }}
-
-        $error = 'invalid email/password'   
+        
+         
 ?>
 
 
