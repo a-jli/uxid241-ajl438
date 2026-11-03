@@ -3,10 +3,11 @@
     require '../inc/database.php';
     require '../inc/functions.php'; 
     session_start();
+    require '../inc/guard.php'; 
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = post_value('email');
-        $plain = $_POST['password'] ?? 
+        $plain = $_POST['password'] ?? '';
         $hash = password_hash($plain, PASSWORD_DEFAULT);
     
         $result = mysqli_execute_query (

@@ -6,7 +6,7 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = post_value('email');
-        $plain = $_POST['password'] ?? 
+        $plain = $_POST['password'] ?? '';
         $hash = password_hash($plain, PASSWORD_DEFAULT);
     
         $result = mysqli_execute_query (
@@ -19,7 +19,7 @@
 
         if ($user !== null && password_verify($plain, $user['password_hash'])) {
             session_regenerate_id(true);
-            $_SESSION['user-id'] = $user['id'];
+            $_SESSION['user_id'] = $user['id'];
 
             header("Location: admin/index.php");
             exit;
@@ -57,8 +57,8 @@
     <main>
         <h1>Login</h1>
        <form method = "post">
-            <input type="email" name="email" placeholder="email" require>
-            <input type="password" name="password" placeholder="pw" require>
+            <input type="email" name="email" placeholder="email" required>
+            <input type="password" name="password" placeholder="pw" required>
             <button type="submit">Submit</button>
         </form>
         <a href="register.php">No Account? Register Here!</a>
