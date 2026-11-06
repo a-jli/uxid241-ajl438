@@ -23,6 +23,7 @@ function value_trim(string $key): string {
 function get_all_recipes (mysqli $conn):array {
     $sql = 'SELECT id, title FROM cookbook_recipes 
     ORDER BY id ASC';
+    //change order here
     return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
 }
 
@@ -46,7 +47,8 @@ $result = mysqli_query($conn, 'SELECT cookbook_recipes.id,
     cookbook_categories.name 
     AS category, description, servings, time, calories, ingredients, steps, images
     FROM cookbook_recipes
-    INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id');
+    INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
+    ORDER BY id ASC');
 // join - query that reads matching rows from both tables together, inner means
 // only get rows where the match exists on both sides
 
