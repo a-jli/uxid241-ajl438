@@ -79,6 +79,14 @@ main {
     background-color: var(--green);
 }
 
+.text-wrapper {
+    width: 80%;
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 .search-filter-wrapper {
     display: flex;
     flex-direction: row;   

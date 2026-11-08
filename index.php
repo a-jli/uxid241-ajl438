@@ -3,6 +3,8 @@
     require 'inc/database.php';
     require 'inc/functions.php';
 
+    $id = (int) get_value('id');
+    $recipe = get_recipe($conn, $id);
     // $recipes = get_all_recipes($conn);
     // this doesnt do anything? the recipe stuff theyre getting is from
     //$recipes = mysqli_fetch_all($result, MYSQLI_ASSOC); and not get all recipes...
@@ -21,7 +23,7 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a href="index.php"><h1>IDM 232 Cookbook</h2></li></a>
+            <a href="index.php"><h1>IDM 232 Cookbook</h1></a>
             <ul>
                 <li><a href="index.php">HOME</a></li>
                 <li><a href="all-recipes.php">ALL RECIPES</a></li>
@@ -47,35 +49,61 @@
             <div>
             <h2>Search Recipes:</h2>
             <form action="index.php" method = "GET"> 
-
                 <!-- <label for="q"> Search Recipes </label> -->
                 <input type= "search" id="q" name="q" value="<?= e($food_searched) ?>">
                 <button type="submit">Search</button>
             </form>                
             </div>
         </div>
-        <div class="recipes-grid">
-            <?php foreach ($recipes as $recipe):?>
-                <?php $images = explode ('*', $recipe['images']);?>
-                <div class="recipe-wrapper"> 
-                    <div class="recipe-header">
-                        <div class="recipe-header-img">
-                            <img src="assets/images/<?= e(end($images)) ?>" alt="">
+            <?php if ($food_searched !== '') : ?> 
+                <p><?=count($food_results); ?> result(s) for "<?= e($food_searched); ?>"</p>
+                <div class="recipes-grid">    
+                    <?php foreach ($food_results as $recipe) : ?>
+                        <?php $images = explode ('*', $recipe['images']);?>
+                        <div class="recipe-wrapper"> 
+                            <div class="recipe-header">
+                                <div class="recipe-header-img">
+                                    <img src="assets/images/<?= e(end($images)) ?>" alt="">
+                                </div>
+                                <div class="non-img">
+                                    <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                                    <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
+                                    <div class="recipe-wrapper-pill">
+                                        <p class="category"><?= e($recipe['category']); ?></p> 
+                                        <p class="calories"><?= e($recipe['calories']);?>cal</p>
+                                        <p class="time"><?= e($recipe['time']); ?> min</p>
+                                    </div>
+                                </div>
+                            </div>  
+                            <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
                         </div>
-                        <div class="non-img">
-                            <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
-                            <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
-                            <div class="recipe-wrapper-pill">
-                                <p class="category"><?= e($recipe['category']); ?></p> 
-                                <p class="calories"><?= e($recipe['calories']);?>cal</p>
-                                <p class="time"><?= e($recipe['time']); ?> min</p>
-                            </div>
+                    <?php endforeach; ?>
+                    
+            <?php else :?>
+                <div class="recipes-grid">
+                    <?php foreach ($recipes as $recipe):?>
+                        <?php $images = explode ('*', $recipe['images']);?>
+                        <div class="recipe-wrapper"> 
+                            <div class="recipe-header">
+                                <div class="recipe-header-img">
+                                    <img src="assets/images/<?= e(end($images)) ?>" alt="">
+                                </div>
+                                <div class="non-img">
+                                    <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                                    <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
+                                    <div class="recipe-wrapper-pill">
+                                        <p class="category"><?= e($recipe['category']); ?></p> 
+                                        <p class="calories"><?= e($recipe['calories']);?>cal</p>
+                                        <p class="time"><?= e($recipe['time']); ?> min</p>
+                                    </div>
+                                </div>
+                            </div>  
+                            <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
                         </div>
-                    </div>  
-                    <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
+                    <?php endforeach; ?>      
                 </div>
-            <?php endforeach; ?>      
-        </div>   
+        <?php endif; ?>     
+
     </main>
 </body>
 </html>

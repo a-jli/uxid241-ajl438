@@ -5,6 +5,8 @@
     session_start();
     require '../inc/guard.php'; 
 
+    $id = (int) get_value('id');
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = post_value('email');
         $plain = $_POST['password'] ?? '';
@@ -22,9 +24,19 @@
             $_SESSION['user-id'] = $user['id'];
             header("location:admin.php");
             exit;
-        }}
+        }
 
-        $error = 'Invalid email/password.'   
+        var_dump($_POST['step']);
+        $step_list = $POST['step'] ?? [];
+            if ($step_list !== []) {
+                // syntax error, unexpected token "," admin\index.php on line 33????
+                $steps = implode ('*'), $step_list;
+                add_steps($conn, (int)$id $steps);
+            }
+        
+        }
+
+        $error = 'Invalid email/password.' 
 ?>
 
 
@@ -52,10 +64,41 @@
         </div>
     </nav>
     <main>
-        <h1>Admin</h1>
-        <!-- <p>signed in as 
-            ?= e($user['email'])?></p> -->
-        <a href="../logout.php">Logout</a>
+        <div class="text-wrapper">
+            <h1>Admin</h1>
+            <hr>
+            <h2>Add Recipe</h2>
+            <form method = "post"><?=e('?id') ?>
+                <h3>Recipe Title<h3>
+                <fieldset id = "steps fieldset"></fieldset>
+                <input type= "text" id="added-title" name="added-title" value="Title">
+                <input type= "text" id="added-subtitle" name="added-subtitle" value="Subtitle">
+                <input type= "text" id="added-desc" name="added-desc" value="Description">
+                <div class="form-buttons">
+                    <button id="add-step">Add Step</button>
+                    <button type="submit">Submit</button>
+                </div>
+            <?php 
+
+            $recipe = get_recipe($conn, $id);
+                if ($recipe && $recipe['steps']):
+            ?>
+            <h2>Current Steps</h2>
+            <ol>
+                <?php $steps = explode('*', $recipe['steps']);
+                foreach ($steps as $step);
+                ?>
+                <li><?= e($step) ?></li>
+            <?php endif;?>
+                </ol>
+            <?php endforeach; ?>
+            <hr>
+            <h2>Edit Recipe</h2>
+            <hr>
+            <h2>Delete Recipe</h2>
+            <hr>
+            <a href="../logout.php">Logout</a>
+        </div>
     </main>
 </body>
 </html>

@@ -43,7 +43,7 @@
 
     // RECIPE SUBMIT
     function post_value_trim(string $key): string {
-    return trim($_POST[$key] ?? '');
+        return trim($_POST[$key] ?? '');
     }
 
     //variables for stuff

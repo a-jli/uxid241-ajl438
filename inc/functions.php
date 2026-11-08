@@ -20,12 +20,12 @@ function value_trim(string $key): string {
     return trim($_GET[$key] ?? '');
 }
 
-function get_all_recipes (mysqli $conn):array {
-    $sql = 'SELECT id, title FROM cookbook_recipes 
-    ORDER BY id ASC';
-    //change order here
-    return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
-}
+// function get_all_recipes (mysqli $conn):array {
+//     $sql = 'SELECT id, title FROM cookbook_recipes 
+//     ORDER BY id ASC';
+//     //change order here
+//     return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
+// }
 
 function get_recipe (mysqli $conn, int $id):?array {
     $sql = 'SELECT cookbook_recipes.id, 
@@ -54,9 +54,12 @@ $result = mysqli_query($conn, 'SELECT cookbook_recipes.id,
 
 $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$food_searched = value_trim('q'); // set query variable to trimmed string 
-$food_results = []; // empty array for results to fill
+//SEARCH FUNCTION???? ========================================================
 
+$food_searched = value_trim('q'); //trim query
+$food_results = []; // empty array
+
+//not a prepared statement for beta
 if ($food_searched !== '') { //if it isn't empty?
     foreach($recipes as $recipe) { // v set everything to lowercase for search 
         if (str_contains(strtolower(e($recipe['title'])), strtolower($food_searched))) {
@@ -64,4 +67,37 @@ if ($food_searched !== '') { //if it isn't empty?
         }
     }
 }
-?>
+
+
+function search_recipe (mysqli $conn):array {
+    $sql = 'SELECT * FROM cookbook_recipes
+            WHERE title LIKE ? OR description LIKE ?';
+    $like = '%' . $q . '%';
+    $search_result = mysqli_execute_query($conn, $sql, [$like, $like]);
+}
+
+//ADMIN FEATURES ========================================================
+// A session-protected admin area: 
+// the create / edit / delete pages are gated by a session guard 
+// anonymous visitor is redirected to login. 
+// Reading recipes can stay public.
+
+function create_recipe(mysqli $conn, string $title, int $category_id): int {
+  $sql = 'INSERT INTO recipes (title, category_id) VALUES (?, ?)';
+  mysqli_execute_query($conn, $sql, [$title, $category_id]);
+  return (int) mysqli_insert_id($conn);
+}
+
+function update_title(mysqli $conn, int $id, string $title): void {
+  $sql = 'UPDATE recipes SET title = ? WHERE id = ?';
+  mysqli_execute_query($conn, $sql, [$title, $id]);
+}
+
+function delete_recipe(mysqli $conn, int $id): void {
+  mysqli_execute_query($conn, 'DELETE FROM recipes WHERE id = ?', [$id]);
+}
+
+function add_steps (mysqli $conn, int $id, string $steps): void {
+    $sql = 'UPDATE recipes SET steps = ?';
+    mysqli_execute_query($conn, $sql, [$steps]);
+} 
