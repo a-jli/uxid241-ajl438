@@ -2,11 +2,12 @@
     declare(strict_types=1);
     require '../inc/database.php';
     require '../inc/functions.php'; 
-    session_start();
+    // session_start();
     require '../inc/guard.php'; 
 
     $id = (int) get_value('id');
     
+
     var_dump($_POST['step']);
     // Undefined array key "step" on line 10 NULL ?
 
@@ -102,7 +103,7 @@
             <h2>Delete Recipe</h2>
             <p>add a delete button (form with hidden id) to the recipe wrappers</p>
             <!-- submit the id of what you want to delete, confirm, then delete where id? -->
-
+            <hr>
             <a class="view-recipe-btn" href="../logout.php">Logout</a>
             <br>
         </div>
