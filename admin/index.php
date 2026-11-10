@@ -6,37 +6,15 @@
     require '../inc/guard.php'; 
 
     $id = (int) get_value('id');
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $email = post_value('email');
-        $plain = $_POST['password'] ?? '';
-        $hash = password_hash($plain, PASSWORD_DEFAULT);
     
-        $result = mysqli_execute_query (
-            $conn,
-            'SELECT id, password_hash FROM users WHERE email = ?'
-            [$email]
-        );
-        
-        $user = mysqli_fetch_assoc($result);
-        if ($user !== null && password_verify($plain, $user[password_hash])) {
-            session_regenerate_id(true);
-            $_SESSION['user-id'] = $user['id'];
-            header("location:admin.php");
-            exit;
-        }
+    var_dump($_POST['step']);
+    // Undefined array key "step" on line 10 NULL ?
 
-        var_dump($_POST['step']);
-        $step_list = $POST['step'] ?? [];
-            if ($step_list !== []) {
-                // syntax error, unexpected token "," admin\index.php on line 33????
-                $steps = implode ('*'), $step_list;
-                add_steps($conn, (int)$id $steps);
-            }
-        
+    $step_list = $_POST['step'] ?? [];
+        if ($step_list !== []) {
+            $steps = implode ('*', $step_list);
+            add_steps($conn, $id, $steps);
         }
-
-        $error = 'Invalid email/password.' 
 ?>
 
 
@@ -45,7 +23,7 @@
 <head> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UXID 241 Cookbook - Login</title>
+    <title>UXID 241 Cookbook - Admin</title>
     <link rel="icon" type="image/x-icon" href="../assets/images/placeholder.png">
     <link rel="stylesheet" href="../assets/styles/normalize.css">
     <link rel="stylesheet" href="../assets/styles/main.css">
@@ -65,19 +43,27 @@
     </nav>
     <main>
         <div class="text-wrapper">
+            <br>
             <h1>Admin</h1>
             <hr>
             <h2>Add Recipe</h2>
-            <form method = "post"><?=e('?id') ?>
-                <h3>Recipe Title<h3>
-                <fieldset id = "steps fieldset"></fieldset>
+            <br>
+            <form method = "post"> 
+                <h3>Title</h3>
                 <input type= "text" id="added-title" name="added-title" value="Title">
+                <h3>Subtitle</h3>
                 <input type= "text" id="added-subtitle" name="added-subtitle" value="Subtitle">
+                <h3>Description</h3>
                 <input type= "text" id="added-desc" name="added-desc" value="Description">
+                <h3>Steps</h3>
+                <fieldset id = "steps-fieldset">
+                </fieldset>
                 <div class="form-buttons">
-                    <button id="add-step">Add Step</button>
+                    <button type="button" id="add-step">Add Step</button>
+                    <!-- this button doesnt do anything -->
                     <button type="submit">Submit</button>
                 </div>
+            </form>
             <?php 
 
             $recipe = get_recipe($conn, $id);
@@ -91,13 +77,34 @@
                 <li><?= e($step) ?></li>
             <?php endif;?>
                 </ol>
-            <?php endforeach; ?>
+            
             <hr>
             <h2>Edit Recipe</h2>
-            <hr>
+            <!-- list each recipe -> form with each associated input filled with what 
+             it has (???) -> submit as post -> sql update? -->
+            
+            <div class="recipes-grid">
+                <!-- display everything if nothing searched -->
+                <?php foreach ($recipes as $recipe):?>
+                    <?php $images = explode ('*', $recipe['images']);?>
+                    <div class="recipe-wrapper"> 
+                        <div class="recipe-header">
+                            <div class="non-img">
+                                <h3 class="title serious"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                            </div>
+                        </div>  
+                        <a class="view-recipe-btn" href="edit.php?id=<?= $recipe['id']?>">Edit Recipe</a>
+                    </div>
+                <?php endforeach; ?>      
+            </div>            
+            
+             <hr>
             <h2>Delete Recipe</h2>
-            <hr>
-            <a href="../logout.php">Logout</a>
+            <p>add a delete button (form with hidden id) to the recipe wrappers</p>
+            <!-- submit the id of what you want to delete, confirm, then delete where id? -->
+
+            <a class="view-recipe-btn" href="../logout.php">Logout</a>
+            <br>
         </div>
     </main>
 </body>

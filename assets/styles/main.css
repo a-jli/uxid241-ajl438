@@ -81,9 +81,20 @@ main {
 
 .text-wrapper {
     width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     form {
         display: flex;
         flex-direction: column;
+        width: 80%;
+        gap: 0.5rem;
+        input {
+            border-radius: 0.5rem;
+        }
+    }
+    button {
+        border-radius: 0.5rem;
     }
 }
 
@@ -171,6 +182,9 @@ form {
         .title {
             font-size: 1.5rem;
             height: 100%;
+        }
+        .title.serious {
+            font-size: 1rem;
         }
         .subtitle {
             font-size: 1.2rem;
@@ -304,12 +318,15 @@ form {
     }
 }
 
-
+fieldset {
+    padding: 1rem;
+    border: 0.25rem solid var(--yellow);
+}
 
 .steps-wrapper{
     display: flex;
     flex-direction: row;
-    gap: 1rem;
+    gap: 0.5rem;
     width: 100%;
     p {
         width: 100%;
@@ -318,7 +335,11 @@ form {
         width: 40%;
         object-fit: cover;
     }
+    .step-number {
+    }
 }
+
+
 
 
 @media screen and (max-width: 1600px) {

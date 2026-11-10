@@ -34,7 +34,6 @@ function get_recipe (mysqli $conn, int $id):?array {
     cookbook_categories.name 
     AS category, description, servings, time, calories, ingredients, steps, images 
     FROM cookbook_recipes 
-    -- not sure why its stil giving undefined array key category
     INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
     WHERE cookbook_recipes.id = ?';
     $result = mysqli_execute_query($conn, $sql, [$id]);
@@ -59,45 +58,48 @@ $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 $food_searched = value_trim('q'); //trim query
 $food_results = []; // empty array
 
-//not a prepared statement for beta
-if ($food_searched !== '') { //if it isn't empty?
-    foreach($recipes as $recipe) { // v set everything to lowercase for search 
-        if (str_contains(strtolower(e($recipe['title'])), strtolower($food_searched))) {
-            $food_results[] = $recipe; //add recipes to results
-        }
-    }
-}
-
-
-function search_recipe (mysqli $conn):array {
-    $sql = 'SELECT * FROM cookbook_recipes
-            WHERE title LIKE ? OR description LIKE ?';
+function search_recipe (mysqli $conn, string $q):array {
     $like = '%' . $q . '%';
-    $search_result = mysqli_execute_query($conn, $sql, [$like, $like]);
+    $result = mysqli_execute_query(
+        $conn,
+        'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle,
+                cookbook_categories.name AS category, description, servings, time,
+                calories, ingredients, steps, images
+        FROM cookbook_recipes
+        INNER JOIN cookbook_categories
+        ON cookbook_recipes.category_id = cookbook_categories.id
+        WHERE cookbook_recipes.title LIKE ? OR cookbook_recipes.description LIKE ?
+        ORDER BY cookbook_recipes.id ASC',
+        [$like, $like]
+    );
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    // $sql = 'SELECT * FROM cookbook_recipes
+    //         WHERE title LIKE ? OR description LIKE ?';
+    // $like = '%' . $q . '%';
+    // $search_result = mysqli_execute_query($conn, $sql, [$like, $like]);
 }
+
+
 
 //ADMIN FEATURES ========================================================
-// A session-protected admin area: 
-// the create / edit / delete pages are gated by a session guard 
-// anonymous visitor is redirected to login. 
-// Reading recipes can stay public.
 
 function create_recipe(mysqli $conn, string $title, int $category_id): int {
-  $sql = 'INSERT INTO recipes (title, category_id) VALUES (?, ?)';
+  $sql = 'INSERT INTO cookbook_recipes (title, category_id) VALUES (?, ?)';
   mysqli_execute_query($conn, $sql, [$title, $category_id]);
   return (int) mysqli_insert_id($conn);
 }
 
 function update_title(mysqli $conn, int $id, string $title): void {
-  $sql = 'UPDATE recipes SET title = ? WHERE id = ?';
+  $sql = 'UPDATE cookbook_recipes SET title = ? WHERE id = ?';
   mysqli_execute_query($conn, $sql, [$title, $id]);
 }
 
 function delete_recipe(mysqli $conn, int $id): void {
-  mysqli_execute_query($conn, 'DELETE FROM recipes WHERE id = ?', [$id]);
+  mysqli_execute_query($conn, 'DELETE FROM cookbook_recipes WHERE id = ?', [$id]);
 }
 
 function add_steps (mysqli $conn, int $id, string $steps): void {
-    $sql = 'UPDATE recipes SET steps = ?';
-    mysqli_execute_query($conn, $sql, [$steps]);
+    $sql = 'UPDATE cookbook_recipes SET steps = ? WHERE id = ?';
+    mysqli_execute_query($conn, $sql, [$steps, $id]);
 } 

@@ -40,17 +40,18 @@
                             <div class="vertical">
                                 <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
                                 <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4>
-                                <!--calories and time are integers in the db, and displayed fine when I was
-                                looping through recipes earlier. Unsure why they break now? $value asks for
-                                string but int is given?) -->
                                 <div class="recipe-wrapper-pill">
                                 <p class="category"><?= e($recipe['category']); ?></p> 
                                 <p class="calories"><?= (string) $recipe['calories'];?>cal</p> 
                                 <p class="time"><?= (string) $recipe['time']; ?> min</p>
                             </div>
                             </div>
-                            <?php $images = explode ('*', $recipe['images']);?>
-                            <img class="hero-image" src="assets/images/<?= e(end($images)) ?>" alt="">
+                            
+                            <?php if ($recipe['images'] === ''): ?>
+                            <?php else: ?>
+                                <?php $images = explode ('*', $recipe['images']);?>
+                                <img class="hero-image" src="assets/images/<?= e(end($images)) ?>" alt="">
+                            <?php endif ?>
                         </div>
                     </div>
                     <div class="overview-ingredients">
@@ -74,7 +75,11 @@
                     <?php $images = explode ('*', $recipe['images']);?>
                         <?php foreach ($steps as $i => $step): ?>
                             <div class="steps-wrapper">
-                                <img src="assets/images/<?= e($images[$i + 1]) ?>" alt="">
+                                <?php if ($recipe['images'] === ''): ?>
+                                <?php else: ?>
+                                    <img src="assets/images/<?= e($images[$i + 1]) ?>" alt="">
+                                <?php endif ?>
+                                <h3 class="step-number" >Step <?=$i + 1?></h3>
                                 <p><?= e($step) ?></p>
                             </div>
                         <?php endforeach; ?>

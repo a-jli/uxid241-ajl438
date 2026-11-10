@@ -154,3 +154,76 @@
                     </div>
             <?php endforeach; ?>    
 
+<!-- Search from index that isnt prepared statement -->
+            
+                    <?php if ($food_searched !== '') : ?> 
+            <p><?=count($food_results); ?> result(s) for "<?= e($food_searched); ?>"</p>
+            <div class="recipes-grid">    
+                <?php foreach ($food_results as $recipe) : ?>
+                    <?php $images = explode ('*', $recipe['images']);?>
+                    <div class="recipe-wrapper"> 
+                        <div class="recipe-header">
+                            <div class="recipe-header-img">
+                                <img src="assets/images/<?= e(end($images)) ?>" alt="">
+                            </div>
+                            <div class="non-img">
+                                <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                                <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
+                                <div class="recipe-wrapper-pill">
+                                    <p class="category"><?= e($recipe['category']); ?></p> 
+                                    <p class="calories"><?= e($recipe['calories']);?>cal</p>
+                                    <p class="time"><?= e($recipe['time']); ?> min</p>
+                                </div>
+                            </div>
+                        </div>  
+                        <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
+                    </div>
+                <?php endforeach; ?>
+                
+        <?php else :?>
+            <div class="recipes-grid">
+                <?php foreach ($recipes as $recipe):?>
+                    <?php $images = explode ('*', $recipe['images']);?>
+                    <div class="recipe-wrapper"> 
+                        <div class="recipe-header">
+                            <div class="recipe-header-img">
+                                <img src="assets/images/<?= e(end($images)) ?>" alt="">
+                            </div>
+                            <div class="non-img">
+                                <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                                <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
+                                <div class="recipe-wrapper-pill">
+                                    <p class="category"><?= e($recipe['category']); ?></p> 
+                                    <p class="calories"><?= e($recipe['calories']);?>cal</p>
+                                    <p class="time"><?= e($recipe['time']); ?> min</p>
+                                </div>
+                            </div>
+                        </div>  
+                        <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
+                    </div>
+                <?php endforeach; ?>      
+            </div>
+        <?php endif; ?>    
+
+
+                <!--admin -->
+
+                    // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //     $email = post_value('email');
+    //     $plain = $_POST['password'] ?? '';
+    //     $hash = password_hash($plain, PASSWORD_DEFAULT);
+    
+    //     $result = mysqli_execute_query (
+    //         $conn,
+    //         'SELECT id, password_hash FROM users WHERE email = ?'
+    //         [$email]
+    //     );
+        
+    //     $user = mysqli_fetch_assoc($result);
+    //     if ($user !== null && password_verify($plain, $user[password_hash])) {
+    //         session_regenerate_id(true);
+    //         $_SESSION['user-id'] = $user['id'];
+    //         header("location:admin.php");
+    //         exit;
+    //     }
+    // }
