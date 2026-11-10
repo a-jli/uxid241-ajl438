@@ -2,7 +2,6 @@
     declare(strict_types=1);
     require '../inc/database.php';
     require '../inc/functions.php'; 
-    session_start();
     require '../inc/guard.php'; 
 
     $id = (int) get_value('id');
