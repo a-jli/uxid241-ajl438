@@ -77,6 +77,9 @@
                     </div>
                 <?php endforeach; ?>    
             </div>
+        <?php elseif ($food_searched !== '' && $food_results === []):?>
+            <p>nothing</p>
+        <!-- ok make this actually work-->
         <?php else: ?>
             <div class="recipes-grid">
                 <?php foreach ($recipes as $recipe):?>
@@ -100,6 +103,7 @@
                     </div>
                 <?php endforeach; ?>      
             </div>
+        
         <?php endif; ?>
     </main>
     <script src="../assets/script.js"></script>

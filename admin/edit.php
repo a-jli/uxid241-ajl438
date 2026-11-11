@@ -6,6 +6,13 @@
 
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        update_recipe($conn, $id, post_value('title'), post_value('subtitle'), post_value('desc'));
+        // header('Location: index.php');
+        // exit;
+        //NO CLUE WHY ITS WEIRD!
+        }
 ?>
 
 

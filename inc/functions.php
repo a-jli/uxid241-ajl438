@@ -79,9 +79,9 @@ function search_recipe (mysqli $conn, string $q):array {
 
 //ADMIN FEATURES ========================================================
 
-function create_recipe(mysqli $conn, string $title, int $category_id): int {
-  $sql = 'INSERT INTO cookbook_recipes (title, subtitle, description) VALUES (?, ?, ?)';
-  mysqli_execute_query($conn, $sql, [$title, $category_id]);
+function create_recipe(mysqli $conn, string $title, string $subtitle, string $description, int $category_id): int {
+  $sql = 'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)';
+  mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $category_id]);
   return (int) mysqli_insert_id($conn);
 }
 
@@ -92,10 +92,8 @@ function create_recipe(mysqli $conn, string $title, int $category_id): int {
 
 function update_recipe(mysqli $conn, int $id, string $title, string $subtitle, string $description): void {
   $sql = 'UPDATE cookbook_recipes 
-  SET title = ? WHERE id = ?
-  SET subtitle = ? WHERE id = ?
-  SET description = ? WHERE id = ?';
-  mysqli_execute_query($conn, $sql, [$title, $subtitle, $description]);
+  SET title = ?, subtitle = ?, description = ? WHERE id = ?';
+  mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $id]);
 }
 
 function delete_recipe(mysqli $conn, int $id): void {

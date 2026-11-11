@@ -12,22 +12,50 @@
             $steps = implode ('*', $step_list);
             add_steps($conn, $id, $steps);
         }
-
+ 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $addedTitle = post_value('added-title');
         $addedSubtitle = post_value('added-subtitle');
         $addedDescription = post_value('added-desc');
-        try {
-            mysqli_execute_query(
-                $conn,
-                'INSERT INTO cookbook_recipes (title, subtitle, description) VALUES (?, ?, ?)',
-                [$addedTitle, $addedSubtitle, $addedDescription]
-            );
-            $error = 'Recipe submitted!';
-        } catch (mysqli_sql_exception $e) {
-            $error = 'There was a problem with your submission.';
+        $addedCategory = post_value('added-category');
+        $deleteId = post_value('delete-id');
+
+        switch ($_POST['form']) {
+            case "A":
+                echo "add";
+            try {
+                mysqli_execute_query(
+                    $conn,
+                    'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)',
+                    [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
+                );
+                $error = 'Recipe submitted!';
+            } catch (mysqli_sql_exception $e) {
+                $error = 'There was a problem with your submission.';
+                $e->getMessage(); 
+            }
+                break;
+
+            case "B":
+                echo "delete";
+                echo ($deleteId);
+                try {
+                    mysqli_execute_query(
+                        $conn, 
+                        'DELETE FROM cookbook_recipes WHERE id = ?', [$deleteId]);
+                        //only deletes the last one and after 2 clicks??
+                } catch (mysqli_sql_exception $e) {
+                    $deleteError = 'There was a problem with your deletion.';
+                    $e->getMessage(); 
+                }
+                break;
+
+            default:
+                echo "something broke?";
         }
+
         }
+
 ?>
 
 
@@ -55,6 +83,9 @@
         </div>
     </nav>
     <main>
+                    <?php if (!empty($deleteError)): ?>
+                <p><?= e($deleteError)?></p>
+            <?php endif?> 
         <div class="text-wrapper">
             <br>
             <h1>Admin</h1>
@@ -69,9 +100,12 @@
                 <input type= "text" id="added-subtitle" name="added-subtitle" value="">
                 <h3>Description</h3>
                 <input type= "text" id="added-desc" name="added-desc" value="">
+                <h3>Category (1 veg 2 fish 3 poultry 4 pork 5 beef)</h3>
+                <input type= "text" id="added-category" name="added-category" value="">
                 <h3>Steps</h3>
                 <fieldset id = "steps-fieldset">
                 </fieldset>
+                <input type="hidden" name="form" id="form" value="A">
                 <div class="form-buttons">
                     <button type="button" id="add-step">Add Step</button>
                     <!-- this button doesnt do anything -->
@@ -79,6 +113,9 @@
                     <br>
                 </div>
             </form>
+            <?php if (!empty($error)): ?>
+                <p><?= e($error)?> </p>
+            <?php endif?>
             <?php 
 
             $recipe = get_recipe($conn, $id);
@@ -99,7 +136,6 @@
              it has (???) -> submit as post -> sql update? -->
             
             <div class="recipes-grid">
-                <!-- display everything if nothing searched -->
                 <?php foreach ($recipes as $recipe):?>
                     <?php $images = explode ('*', $recipe['images']);?>
                     <div class="recipe-wrapper"> 
@@ -112,18 +148,24 @@
                         <div class="horizontal button-wrapper">
                             <a class="view-recipe-btn" href="edit.php?id=<?= $recipe['id']?>">Edit</a>
                             <form class="delete-form" method = "post"> 
-                                <input type="hidden" id="id" name="id" value="<?= $recipe['id']?>">
+                                <input type="hidden" id="form" name="form" value="B">
+                                <input type="hidden" id="delete-id" name="delete-id" value="<?= $recipe['id']?>">
                                 <button onclick="confirmDelete()" class="delete-btn">Delete</button>
                                 <script>
+                                //move this
                                 function confirmDelete() {
-                                    confirm("Are you sure you want to delete this recipe?");
+                                    confirm("Are you sure you want to delete <?= e($recipe['title'])?>?");
+                                    // this only asks for id48/test????
                                 }
                                 </script>
                             </form>
                         </div>
                     </div>
                 <?php endforeach; ?>      
-            </div>            
+            </div>
+            <?php if (!empty($deleteError)): ?>
+                <p><?= e($deleteError)?></p>
+            <?php endif?>            
             <a class="view-recipe-btn" href="../logout.php">Logout</a>
             <br>
         </div>
