@@ -51,7 +51,7 @@
         <h1>Register</h1>
        <form method = "post">
             <input type="email" name="email" placeholder="email" required>
-            <input type="password" name="password" placeholder="pw" required>
+            <input type="password" name="password" placeholder="password" required>
             <button type="submit">Submit</button>
         </form>
 

@@ -14,15 +14,15 @@
         }
  
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $addedTitle = post_value('added-title');
-        $addedSubtitle = post_value('added-subtitle');
-        $addedDescription = post_value('added-desc');
-        $addedCategory = post_value('added-category');
-        $deleteId = post_value('delete-id');
+
 
         switch ($_POST['form']) {
             case "A":
-                echo "add";
+                $addedTitle = post_value('added-title');
+                $addedSubtitle = post_value('added-subtitle');
+                $addedDescription = post_value('added-desc');
+                $addedCategory = post_value('added-category');
+                echo "add recipe form submitted";
             try {
                 mysqli_execute_query(
                     $conn,
@@ -37,13 +37,14 @@
                 break;
 
             case "B":
-                echo "delete";
+                $deleteId = post_value('delete-id');
+                echo "delete recipe form submitted";
                 echo ($deleteId);
                 try {
                     mysqli_execute_query(
                         $conn, 
                         'DELETE FROM cookbook_recipes WHERE id = ?', [$deleteId]);
-                        //only deletes the last one and after 2 clicks??
+                        //only deletes the last id, and needs 2 clicks??
                 } catch (mysqli_sql_exception $e) {
                     $deleteError = 'There was a problem with your deletion.';
                     $e->getMessage(); 
@@ -154,8 +155,8 @@
                                 <script>
                                 //move this
                                 function confirmDelete() {
-                                    confirm("Are you sure you want to delete <?= e($recipe['title'])?>?");
-                                    // this only asks for id48/test????
+                                    confirm("Are you sure you want to delete <?= e($recipe['title'])?>, id: <?= e($recipe['id'])?>?");
+                                    // this only asks for the last id?
                                 }
                                 </script>
                             </form>

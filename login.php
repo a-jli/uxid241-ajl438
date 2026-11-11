@@ -24,7 +24,7 @@
             header("Location: admin/index.php");
             exit;
         } else {
-            $error = 'invalid email/password';  
+            $error = 'Invalid email or password.';  
         }}
         
          
@@ -58,7 +58,7 @@
         <h1>Login</h1>
        <form method = "post">
             <input type="email" name="email" placeholder="email" required>
-            <input type="password" name="password" placeholder="pw" required>
+            <input type="password" name="password" placeholder="password" required>
             <button type="submit">Submit</button>
         </form>
         <a href="register.php">No Account? Register Here!</a>
