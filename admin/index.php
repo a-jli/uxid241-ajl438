@@ -2,19 +2,31 @@
     declare(strict_types=1);
     require '../inc/database.php';
     require '../inc/functions.php'; 
-    // session_start();
     require '../inc/guard.php'; 
 
     $id = (int) get_value('id');
-    
 
-    var_dump($_POST['step']);
-    // Undefined array key "step" on line 10 NULL ?
 
     $step_list = $_POST['step'] ?? [];
         if ($step_list !== []) {
             $steps = implode ('*', $step_list);
             add_steps($conn, $id, $steps);
+        }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $addedTitle = post_value('added-title');
+        $addedSubtitle = post_value('added-subtitle');
+        $addedDescription = post_value('added-desc');
+        try {
+            mysqli_execute_query(
+                $conn,
+                'INSERT INTO cookbook_recipes (title, subtitle, description) VALUES (?, ?, ?)',
+                [$addedTitle, $addedSubtitle, $addedDescription]
+            );
+            $error = 'Recipe submitted!';
+        } catch (mysqli_sql_exception $e) {
+            $error = 'There was a problem with your submission.';
+        }
         }
 ?>
 
@@ -49,13 +61,14 @@
             <hr>
             <h2>Add Recipe</h2>
             <br>
+            <br>
             <form method = "post"> 
                 <h3>Title</h3>
-                <input type= "text" id="added-title" name="added-title" value="Title">
+                <input type= "text" id="added-title" name="added-title" value="">
                 <h3>Subtitle</h3>
-                <input type= "text" id="added-subtitle" name="added-subtitle" value="Subtitle">
+                <input type= "text" id="added-subtitle" name="added-subtitle" value="">
                 <h3>Description</h3>
-                <input type= "text" id="added-desc" name="added-desc" value="Description">
+                <input type= "text" id="added-desc" name="added-desc" value="">
                 <h3>Steps</h3>
                 <fieldset id = "steps-fieldset">
                 </fieldset>
@@ -63,6 +76,7 @@
                     <button type="button" id="add-step">Add Step</button>
                     <!-- this button doesnt do anything -->
                     <button type="submit">Submit</button>
+                    <br>
                 </div>
             </form>
             <?php 
@@ -78,7 +92,7 @@
                 <li><?= e($step) ?></li>
             <?php endif;?>
                 </ol>
-            
+                <br>
             <hr>
             <h2>Edit Recipe</h2>
             <!-- list each recipe -> form with each associated input filled with what 
@@ -90,23 +104,30 @@
                     <?php $images = explode ('*', $recipe['images']);?>
                     <div class="recipe-wrapper"> 
                         <div class="recipe-header">
-                            <div class="non-img">
+                            <div class="non-img horizontal">
                                 <h3 class="title serious"><?= e($recipe['title']) . '<br>'; ?></h3> 
+                                <p class="id serious">id: <?= e($recipe['id']) . '<br>'; ?></p> 
                             </div>
                         </div>  
-                        <a class="view-recipe-btn" href="edit.php?id=<?= $recipe['id']?>">Edit Recipe</a>
+                        <div class="horizontal button-wrapper">
+                            <a class="view-recipe-btn" href="edit.php?id=<?= $recipe['id']?>">Edit</a>
+                            <form class="delete-form" method = "post"> 
+                                <input type="hidden" id="id" name="id" value="<?= $recipe['id']?>">
+                                <button onclick="confirmDelete()" class="delete-btn">Delete</button>
+                                <script>
+                                function confirmDelete() {
+                                    confirm("Are you sure you want to delete this recipe?");
+                                }
+                                </script>
+                            </form>
+                        </div>
                     </div>
                 <?php endforeach; ?>      
             </div>            
-            
-             <hr>
-            <h2>Delete Recipe</h2>
-            <p>add a delete button (form with hidden id) to the recipe wrappers</p>
-            <!-- submit the id of what you want to delete, confirm, then delete where id? -->
-            <hr>
             <a class="view-recipe-btn" href="../logout.php">Logout</a>
             <br>
         </div>
     </main>
+    <script src="../assets/script.js"></script>
 </body>
 </html>

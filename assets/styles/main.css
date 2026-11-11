@@ -11,6 +11,7 @@
      --yellow: rgb(255, 187, 0);
      --orange: rgb(206, 102, 27);
      --darker-orange: rgb(164, 57, 18); 
+     --darkest-orange:rgb(116, 30, 11); 
 }
 
 nav {
@@ -96,6 +97,15 @@ main {
     button {
         border-radius: 0.5rem;
     }
+    form.delete-form {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        .delete-btn {
+            width: 100%;
+        }
+    }
+
 }
 
 .search-filter-wrapper {
@@ -129,18 +139,21 @@ main {
 }
 
 .view-recipe-btn:active {
-    width: 75%;
     background-color: var(--darker-orange);    
     color: var(--off-white);
 }
 
-select, input, button{
+select, input, button, textarea{
     border: none;
     padding: 0.25rem 1rem 0.25rem 1rem;
     border-radius: 0.5rem;
     background-color: var(--off-white);
 }
-
+textarea {
+    width: 100%;
+    field-sizing: content;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}
 form {
     display: flex;
     gap: 0;
@@ -190,6 +203,13 @@ form {
             font-size: 1.2rem;
         }
         /* height: 100%; */
+        p.id.serious {
+            font-size: 1rem;
+            color:var(--off-white);
+            font-weight: bolder;
+            width: 7ch;
+            text-align: right;
+        }
     }
     .recipe-header {
         height: 100%;
@@ -227,6 +247,60 @@ form {
     display: flex;
     flex-direction: column;   
     margin-right: 1rem;
+}
+
+.button-wrapper {
+    padding: 0.5rem;
+    margin: 0;
+    gap: 0.5rem;
+    margin-top: -1rem;
+    button, .view-recipe-btn {
+        margin-bottom: 0;
+    }
+    button.delete-btn {
+        width: 100%;
+        text-decoration: none;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        background-color: var(--orange);
+        transition: 200ms ease-out;
+        font-weight: bolder;
+        width: 80%;
+        text-align: center;
+        color: var(--off-white);
+    }
+    .delete-btn:hover {
+        cursor: pointer;
+        background-color: var(--darker-orange);
+    }
+
+    .delete-btn:active {
+        background-color: var(--darkest-orange);
+        
+    }
+
+}
+
+
+button.submit-btn {
+    text-decoration: none;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: var(--orange);
+    transition: 200ms ease-out;
+    font-weight: bolder;
+    width: 12rem;
+    text-align: center;
+    color: var(--off-white);
+}
+.delete-btn:hover {
+    cursor: pointer;
+    background-color: var(--darker-orange);
+}
+
+.delete-btn:active {
+    background-color: var(--darkest-orange);
+    
 }
 
 .recipe-wrapper {
@@ -319,8 +393,23 @@ form {
 }
 
 fieldset {
-    padding: 1rem;
-    border: 0.25rem solid var(--yellow);
+    padding: 0 0 0 0.5rem;
+    border: 0;
+    border-left: 0.25rem solid var(--yellow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* border: 0.25rem solid var(--yellow); */
+    label {
+        font-weight: bold;
+        margin-top: 0.5rem;
+        
+    }
+    input {
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
 }
 
 .steps-wrapper{
@@ -328,18 +417,54 @@ fieldset {
     flex-direction: row;
     gap: 0.5rem;
     width: 100%;
+    
     p {
         width: 100%;
     }
     img {
         width: 40%;
         object-fit: cover;
+
     }
     .step-number {
+        width: 12ch
+    }
+
+    .step-number.smaller {
+        width: 7ch;
+    }
+
+    .step-text {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        flex: 1;
+        margin-left: 0.5rem;
     }
 }
 
+.edit-recipe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    button {
+        border-radius: .5rem;
+    }
+}
 
+.form-buttons {
+    button {
+        text-decoration: none;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        background-color: var(--yellow);
+        transition: 200ms ease-out;
+        font-weight: bolder;
+        width: 8rem;
+        text-align: center;
+        color: var(--off-black);
+    }
+}
 
 
 @media screen and (max-width: 1600px) {

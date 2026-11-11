@@ -5,11 +5,6 @@
 
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
-
-    search_recipe($conn, $q);
-    //Undefined variable $q on line 9
-    //Uncaught TypeError: search_recipe(): Argument #2 ($q) must be of type string, null given,
-
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +33,8 @@
     <main>
 
         <div class="search-filter-wrapper">
-            <div>
+
+            <!-- <div>
             <h2>Filter By:</h2>
             <select class="dropdown" name="Protein">
                 <option value>Vegetarian</option>
@@ -47,7 +43,8 @@
                 <option value>Pork</option>
                 <option value>Beef</option>
             </select>
-            </div>
+            </div> -->
+            
             <div>
             <h2>Search Recipes:</h2>
             <form action="index.php" method = "GET"> 
@@ -56,12 +53,32 @@
             </form>                
             </div>
         </div>
-        <?php if ($q !== '') : ?>
+        <?php if ($food_searched !== '') : ?>
+            <div class="recipes-grid">
             <?php $food_results = search_recipe($conn, $food_searched);?>
-            <!-- ?? -->
+            <?php foreach ($food_results as $food_result):?>
+                    <?php $images = explode ('*', $food_result['images']);?>
+                    <div class="recipe-wrapper"> 
+                        <div class="recipe-header">
+                            <div class="recipe-header-img">
+                                <img src="assets/images/<?= e(end($images)) ?>" alt="">
+                            </div>
+                            <div class="non-img">
+                                <h3 class="title"><?= e($food_result['title']) . '<br>'; ?></h3> 
+                                <h4 class="subtitle"><?= e($food_result['subtitle']) . '<br>'; ?></h4> 
+                                <div class="recipe-wrapper-pill">
+                                    <p class="category"><?= e($food_result['category']); ?></p> 
+                                    <p class="calories"><?= ($food_result['calories']);?>cal</p>
+                                    <p class="time"><?= ($food_result['time']); ?> min</p>
+                                </div>
+                            </div>
+                        </div>  
+                        <a class="view-recipe-btn" href="recipe.php?id=<?= $food_result['id']?>">View Recipe</a>
+                    </div>
+                <?php endforeach; ?>    
+            </div>
         <?php else: ?>
             <div class="recipes-grid">
-                <!-- display everything if nothing searched -->
                 <?php foreach ($recipes as $recipe):?>
                     <?php $images = explode ('*', $recipe['images']);?>
                     <div class="recipe-wrapper"> 
@@ -85,6 +102,7 @@
             </div>
         <?php endif; ?>
     </main>
+    <script src="../assets/script.js"></script>
 </body>
 </html>
 
@@ -94,5 +112,5 @@ TODO
 - [] admin input
 - [] admin edit
 - [] admin delete
-- [] search w/ prepared statement
+- [DONE] search w/ prepared statement
 -->

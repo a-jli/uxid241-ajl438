@@ -6,12 +6,6 @@
 
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
-    
-    $step_list = $_POST['step'] ?? [];
-        if ($step_list !== []) {
-            $steps = implode ('*', $step_list);
-            add_steps($conn, $id, $steps);
-        }
 ?>
 
 
@@ -43,12 +37,38 @@
         <div class="text-wrapper">
             <br>
             <h1>Edit Recipe:</h1>
-            <p>load that recipe, show filled-in form, POST → UPDATE</p>
         </div>
         <div class="recipe-focus">
             <?php if ($recipe === null): ?>
                 <p>Recipe not found.</p>
             <?php else: ?>
+                <form class="edit-recipe-form" method = "post"> 
+                <h3>Title</h3>
+                <input type= "text" id="title" name="title" value="<?= e($recipe['title']) ?>">
+                <h3>Subtitle</h3>
+                <input type= "text" id="subtitle" name="subtitle" value="<?= e($recipe['subtitle']) ?>">
+                <h3>Description</h3>
+                <textarea type= "text" id="desc" name="desc">
+                    <?= e($recipe['description']) ?>
+                </textarea>
+                <h3>Steps</h3>
+                <fieldset id = "steps-fieldset">
+                    <?php $steps = explode ('*', $recipe['steps']);?>
+                    <?php foreach ($steps as $i => $step): ?>
+                        <div class="steps-wrapper vertical">
+                            <h3 class="step-number smaller" >Step <?=$i + 1?></h3>
+                            <textarea type= "text" id="step" name="step">
+                                <?= e($step) ?>
+                            </textarea>
+                        </div>
+                    <?php endforeach; ?>
+                </fieldset>
+                <div class="form-buttons">
+                    <button class="submit-btn" type="submit">Submit Changes</button>
+                    <br>
+                </div>
+            </form>
+            <hr>
                 <div class="recipe-wrapper"> 
                     <div class="recipe-header">
                         <div class="horizontal">

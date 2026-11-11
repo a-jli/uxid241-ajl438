@@ -79,8 +79,10 @@
                                 <?php else: ?>
                                     <img src="assets/images/<?= e($images[$i + 1]) ?>" alt="">
                                 <?php endif ?>
-                                <h3 class="step-number" >Step <?=$i + 1?></h3>
-                                <p><?= e($step) ?></p>
+                                <div class="step-text">
+                                    <h3 class="step-number" >Step <?=$i + 1?></h3>
+                                    <p><?= e($step) ?></p>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
