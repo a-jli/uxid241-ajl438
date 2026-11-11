@@ -30,6 +30,8 @@
                     [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
                 );
                 $error = 'Recipe submitted!';
+                header('Location: index.php');
+                exit;
             } catch (mysqli_sql_exception $e) {
                 $error = 'There was a problem with your submission.';
                 $e->getMessage(); 
@@ -44,7 +46,9 @@
                     mysqli_execute_query(
                         $conn, 
                         'DELETE FROM cookbook_recipes WHERE id = ?', [$deleteId]);
-                        //only deletes the last id, and needs 2 clicks??
+                        header('Location: index.php');
+                        exit;
+                        //only deletes the last id, and needs 2 clicks?? is the only fix to header redirect?
                 } catch (mysqli_sql_exception $e) {
                     $deleteError = 'There was a problem with your deletion.';
                     $e->getMessage(); 
