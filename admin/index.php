@@ -6,7 +6,7 @@
 
     $id = (int) get_value('id');
 
-
+// implement this later
     $step_list = $_POST['step'] ?? [];
         if ($step_list !== []) {
             $steps = implode ('*', $step_list);
@@ -14,8 +14,6 @@
         }
  
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
         switch ($_POST['form']) {
             case "A":
                 $addedTitle = post_value('added-title');
@@ -152,17 +150,12 @@
                         </div>  
                         <div class="horizontal button-wrapper">
                             <a class="view-recipe-btn" href="edit.php?id=<?= $recipe['id']?>">Edit</a>
-                            <form class="delete-form" method = "post"> 
-                                <input type="hidden" id="form" name="form" value="B">
-                                <input type="hidden" id="delete-id" name="delete-id" value="<?= $recipe['id']?>">
-                                <button onclick="confirmDelete()" class="delete-btn">Delete</button>
-                                <script>
-                                //move this
-                                function confirmDelete() {
-                                    confirm("Are you sure you want to delete <?= e($recipe['title'])?>, id: <?= e($recipe['id'])?>?");
-                                    // this only asks for the last id?
-                                }
-                                </script>
+                            <form class="delete-form" method = "post" > 
+                                <input type="hidden" id="form" name="form" value="B" 
+                                    onsubmit="return confirm('Delete recipe <?= $recipe['title'] ?> (<?= $recipe['id'] ?>?');)">
+                                    <!-- doesnt confirm -->
+                                    <input type="hidden" id="delete-id" name="delete-id" value="<?= $recipe['id']?>">
+                                <button type="submit" class="delete-btn">Delete</button>
                             </form>
                         </div>
                     </div>
