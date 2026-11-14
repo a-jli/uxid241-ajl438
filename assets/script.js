@@ -9,25 +9,20 @@ function addStepInput() {
     const label = document.createElement('label');
     label.setAttribute('for', 'Step ${stepCount}');
     label.textContent = (`Step ${stepCount + 1}`);
-    const input = document.createElement('input');
-    input.type='text';
-    input.required = true;
-    input.id = `step-${stepCount}`;
-    input.name = 'step[]';
+    const textarea = document.createElement('textarea');
+    textarea.type='text';
+    textarea.required = true;
+    textarea.id = `step-${stepCount}`;
+    textarea.name = 'step[]';
     div.append(label);
-    div.append(input);
+    div.append(textarea);
 
     if (stepsFieldset) {
         stepsFieldset.append(div);
-        input.focus();
+        textarea.focus();
         stepCount = stepCount + 1;
     }
 }
 
-// `${nameValue}, User`
-
 btnAddStep.addEventListener('click', addStepInput);
 
-// btnAddStep.addEventListener('click', function (event) {
-//     addStepInput()
-// }

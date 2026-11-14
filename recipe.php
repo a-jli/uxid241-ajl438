@@ -77,7 +77,7 @@
                             <div class="steps-wrapper">
                                 <?php if ($recipe['images'] === ''): ?>
                                 <?php else: ?>
-                                    <img src="assets/images/<?= e($images[$i + 1]) ?>" alt="">
+                                    <img src="assets/images/<?= e($images[$i]) ?>" alt="">
                                 <?php endif ?>
                                 <div class="step-text">
                                     <h3 class="step-number" >Step <?=$i + 1?></h3>

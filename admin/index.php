@@ -6,47 +6,64 @@
 
     $id = (int) get_value('id');
 
-// implement this later
-    $step_list = $_POST['step'] ?? [];
-        if ($step_list !== []) {
-            $steps = implode ('*', $step_list);
-            add_steps($conn, $id, $steps);
-        }
+
+
+    $errors = [];
  
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch ($_POST['form']) {
-            case "A":
+            case "add":
                 $addedTitle = post_value('added-title');
                 $addedSubtitle = post_value('added-subtitle');
                 $addedDescription = post_value('added-desc');
                 $addedCategory = post_value('added-category');
-                echo "add recipe form submitted";
-            try {
-                mysqli_execute_query(
-                    $conn,
-                    'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)',
-                    [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
-                );
-                $error = 'Recipe submitted!';
-                header('Location: index.php');
-                exit;
-            } catch (mysqli_sql_exception $e) {
-                $error = 'There was a problem with your submission.';
-                $e->getMessage(); 
-            }
-                break;
+                // $addedSteps = post_value('step');
+                // fix this later
+                if($addedTitle === '') {
+                    $errors[] = 'Recipe title is required.';
+                }
+                if( $addedSubtitle === '') {
+                    $errors[] = 'Recipe subtitle is required.';
+                } 
+                if($addedDescription === '') {
+                    $errors[] = 'Recipe description is required.';
+                } 
+                if($addedCategory === '') {
+                    $errors[] = 'Recipe category is required.';
+                }  
+                // if($addedSteps === '') {
+                //     $errors[] = 'At least one step is required.';
+                // }  
+                try {
+                    mysqli_execute_query(
+                        $conn,
+                        'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)',
+                        [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
+                    );
+                    $step_list = $_POST['step'] ?? [];
+                        if ($step_list !== []) {
+                            $steps = implode ('*', $step_list);
+                            add_steps($conn, mysqli_insert_id($conn), $steps);
+                        }
+                    $error = 'Recipe submitted!';
+                    header('Location: index.php');
+                    exit;
+                } catch (mysqli_sql_exception $e) {
+                    $error = 'There was a problem with your submission';
+                    $e->getMessage(); 
+                }
+                    break;
+            
 
-            case "B":
+
+            case "delete":
                 $deleteId = post_value('delete-id');
-                echo "delete recipe form submitted";
-                echo ($deleteId);
                 try {
                     mysqli_execute_query(
                         $conn, 
                         'DELETE FROM cookbook_recipes WHERE id = ?', [$deleteId]);
                         header('Location: index.php');
                         exit;
-                        //only deletes the last id, and needs 2 clicks?? is the only fix to header redirect?
                 } catch (mysqli_sql_exception $e) {
                     $deleteError = 'There was a problem with your deletion.';
                     $e->getMessage(); 
@@ -54,9 +71,7 @@
                 break;
 
             default:
-                echo "something broke?";
         }
-
         }
 
 ?>
@@ -86,9 +101,6 @@
         </div>
     </nav>
     <main>
-                    <?php if (!empty($deleteError)): ?>
-                <p><?= e($deleteError)?></p>
-            <?php endif?> 
         <div class="text-wrapper">
             <br>
             <h1>Admin</h1>
@@ -108,7 +120,7 @@
                 <h3>Steps</h3>
                 <fieldset id = "steps-fieldset">
                 </fieldset>
-                <input type="hidden" name="form" id="form" value="A">
+                <input type="hidden" name="form" id="form" value="add">
                 <div class="form-buttons">
                     <button type="button" id="add-step">Add Step</button>
                     <!-- this button doesnt do anything -->
@@ -119,6 +131,9 @@
             <?php if (!empty($error)): ?>
                 <p><?= e($error)?> </p>
             <?php endif?>
+            <?php foreach ($errors as $error) : ?>
+                <p><?= ($error);?></p>
+            <?php endforeach; ?>
             <?php 
 
             $recipe = get_recipe($conn, $id);
@@ -135,9 +150,6 @@
                 <br>
             <hr>
             <h2>Edit Recipe</h2>
-            <!-- list each recipe -> form with each associated input filled with what 
-             it has (???) -> submit as post -> sql update? -->
-            
             <div class="recipes-grid">
                 <?php foreach ($recipes as $recipe):?>
                     <?php $images = explode ('*', $recipe['images']);?>
@@ -149,12 +161,12 @@
                             </div>
                         </div>  
                         <div class="horizontal button-wrapper">
-                            <a class="view-recipe-btn" href="edit.php?id=<?= $recipe['id']?>">Edit</a>
+                            <a class="view-recipe-btn" href="edit.php?id=<?= e($recipe['id'])?>">Edit</a>
                             <form class="delete-form" method = "post" > 
-                                <input type="hidden" id="form" name="form" value="B" 
-                                    onsubmit="return confirm('Delete recipe <?= $recipe['title'] ?> (<?= $recipe['id'] ?>?');)">
-                                    <!-- doesnt confirm -->
-                                    <input type="hidden" id="delete-id" name="delete-id" value="<?= $recipe['id']?>">
+                                <input class="none" type="text" id="form" name="form" value="delete" 
+                                    onsubmit="return confirm('Delete recipe <?= e($recipe['title']) ?> (<?= e($recipe['id']) ?>?');)">
+                                    <!-- doesnt confirm, its no longer a hidden input? -->
+                                    <input type="hidden" id="delete-id" name="delete-id" value="<?= e($recipe['id'])?>">
                                 <button type="submit" class="delete-btn">Delete</button>
                             </form>
                         </div>

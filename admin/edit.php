@@ -9,7 +9,14 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         update_recipe($conn, $id, post_value('title'), post_value('subtitle'), post_value('desc'));
-            header('Location: index.php');
+        $step_list = $_POST['step'] ?? [];
+            if ($step_list !== []) {
+                $steps = implode ('*', $step_list);
+                //must be of type ?array, string given
+                add_steps($conn, mysqli_insert_id($conn), $steps);
+            }            
+        
+        header('Location: index.php');
             exit;
         //is there a way to make it stay on the same page?
         }
@@ -63,15 +70,16 @@
                     <?php $steps = explode ('*', $recipe['steps']);?>
                     <?php foreach ($steps as $i => $step): ?>
                         <div class="steps-wrapper vertical">
-                            <h3 class="step-number smaller" >Step <?=$i + 1?></h3>
-                            <textarea type= "text" id="step" name="step">
+                            <label class="step-number smaller" >Step <?=$i + 1?></label>
+                            <textarea type= "text" id="step-<?= $i + 1?>" name="step">
                                 <?= e($step) ?>
                             </textarea>
                         </div>
                     <?php endforeach; ?>
                 </fieldset>
                 <div class="form-buttons">
-                    <button class="submit-btn" type="submit">Submit Changes</button>
+                    <button type="button" id="add-step">Add Step</button>
+                    <button class="submit-btn" type="submit">Submit</button>
                     <br>
                 </div>
             </form>
@@ -122,6 +130,7 @@
                                     <img src="../assets/images/<?= e($images[$i + 1]) ?>" alt="">
                                 <?php endif ?>
                                 <h3 class="step-number" >Step <?=$i + 1?></h3>
+                                <!-- make this work with added inputs, have it update stepNumber somehow?-->
                                 <p><?= e($step) ?></p>
                             </div>
                         <?php endforeach; ?>
@@ -129,5 +138,6 @@
                 <?php endif; ?>
         </div>   
     </main>
+    <script src="../assets/script.js"></script>
 </body>
 </html>

@@ -93,6 +93,9 @@ main {
         input {
             border-radius: 0.5rem;
         }
+        input.none {
+            display: none;
+        }
     }
     button {
         border-radius: 0.5rem;
@@ -107,6 +110,8 @@ main {
     }
 
 }
+
+
 
 .search-filter-wrapper {
     display: flex;
@@ -289,7 +294,7 @@ button.submit-btn {
     background-color: var(--orange);
     transition: 200ms ease-out;
     font-weight: bolder;
-    width: 12rem;
+    width: 14rem;
     text-align: center;
     color: var(--off-white);
 }
