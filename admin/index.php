@@ -77,7 +77,7 @@
         }
 
         //image upload stuff
-        $upload_folder = 'images';
+        $upload_folder = 'assets/images';
         $results = [];
         if (isset($_FILES['photos']['name']) && (is_array($_FILES['photos']['name']))){
             $files = $_FILES['photos'];
