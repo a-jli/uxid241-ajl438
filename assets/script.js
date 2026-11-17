@@ -8,11 +8,11 @@ function addStepInput() {
     const div = document.createElement('div');
     const label = document.createElement('label');
     label.setAttribute('for', 'Step ${stepCount}');
-    label.textContent = (`Step ${stepCount + 1}`);
+    label.textContent = (`Step ${stepCount + 2}`);
     const textarea = document.createElement('textarea');
     textarea.type='text';
     textarea.required = true;
-    textarea.id = `step-${stepCount}`;
+    textarea.id = `step-${stepCount + 1}`;
     textarea.name = 'step[]';
     div.append(label);
     div.append(textarea);

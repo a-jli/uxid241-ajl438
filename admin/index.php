@@ -45,11 +45,11 @@
                             $steps = implode ('*', $step_list);
                             add_steps($conn, mysqli_insert_id($conn), $steps);
                         }
-                    // $images_list = $_POST['images'] ?? [];
-                    //     if ($image_list !== []) {
-                    //         $images = implode ('*', $images_list);
-                    //         add_images($conn, mysqli_insert_id($conn), $images);                           
-                    //     }
+                    $images_list = $_POST['images'] ?? [];
+                        if ($image_list !== []) {
+                            $images = implode ('*', $images_list);
+                            add_images($conn, mysqli_insert_id($conn), $images);                           
+                        }
                     $error = 'Recipe submitted!';
                     header('Location: index.php');
                     exit;
@@ -146,7 +146,6 @@
             <hr>
             <h2>Add Recipe</h2>
             <br>
-            <br>
             <form method = "post" enctype = "multipart/form-data"> 
                 <h3>Title <span class="red">*</span></h3>
                 <input type= "text" id="added-title" name="added-title" value="">
@@ -164,12 +163,17 @@
                     <option value="5">Beef</option>
                 </select> -->
                 <!--can i get the value of a select the same way i can an input? 
-                i think for category a select makes sense more than a text input -->
-                <h3>Steps <span class="red">*</span></h3>
-                <fieldset id = "steps-fieldset">
-                </fieldset>
+                i think for category a select makes sense more than a text input 
+                tried but didnt seem to be accepted?-->
                 <h3>Images</h3>
                 <input type="file" name="photos[]" multiple>
+                <h3>Steps <span class="red">*</span></h3>
+                <fieldset id = "steps-fieldset">
+                    <div>
+                        <label for="Step ${stepCount}">Step 1</label>
+                        <textarea required="" id="step-0" name="step[]"></textarea>
+                    </div>
+                </fieldset>
                 <input type="hidden" name="form" id="form" value="add">
                 <div class="form-buttons">
                     <button type="button" id="add-step">Add Step</button>

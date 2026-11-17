@@ -12,13 +12,11 @@
         $step_list = $_POST['step'] ?? [];
             if ($step_list !== []) {
                 $steps = implode ('*', $step_list);
-                //must be of type ?array, string given
                 add_steps($conn, mysqli_insert_id($conn), $steps);
             }            
         
         header('Location: index.php');
             exit;
-        //is there a way to make it stay on the same page?
         }
 ?>
 
@@ -69,7 +67,7 @@
                 <fieldset id = "steps-fieldset">
                     <?php $steps = explode ('*', $recipe['steps']);?>
                     <?php foreach ($steps as $i => $step): ?>
-                        <div class="steps-wrapper vertical">
+                        <div class="steps-wrapper edit-page">
                             <label class="step-number smaller" >Step <?=$i + 1?></label>
                             <textarea type= "text" id="step-<?= $i + 1?>" name="step">
                                 <?= e($step) ?>
@@ -124,13 +122,15 @@
                     <?php $steps = explode ('*', $recipe['steps']);?>
                     <?php $images = explode ('*', $recipe['images']);?>
                         <?php foreach ($steps as $i => $step): ?>
-                            <div class="steps-wrapper">
+                            <div class="steps-wrapper vertical">
                                 <?php if ($recipe['images'] === ''): ?>
                                 <?php else: ?>
                                     <img src="../assets/images/<?= e($images[$i + 1]) ?>" alt="">
                                 <?php endif ?>
                                 <h3 class="step-number" >Step <?=$i + 1?></h3>
-                                <!-- make this work with added inputs, have it update stepNumber somehow?-->
+                                <!-- make this work with added inputs, 
+                                 have it update stepNumber somehow?
+                                 the stepnumber stuff is in js, while this is php?-->
                                 <p><?= e($step) ?></p>
                             </div>
                         <?php endforeach; ?>

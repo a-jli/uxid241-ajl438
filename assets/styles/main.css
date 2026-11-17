@@ -75,8 +75,8 @@ hr {
     border-top: 0.25rem solid var(--yellow);
 }
 
-hr {
-    margin-bottom: 0.5rem;
+br {
+    margin-top: 0.5rem
 }
 
 main {
@@ -166,6 +166,7 @@ textarea {
     width: 100%;
     field-sizing: content;
     padding: 0.5rem 1rem 0.5rem 1rem;
+    margin-top: 0.5rem;
 }
 form {
     display: flex;
@@ -416,7 +417,6 @@ fieldset {
     label {
         font-weight: bold;
         margin-top: 0.5rem;
-        
     }
     input {
         width: 100%;
@@ -454,7 +454,15 @@ fieldset {
         flex: 1;
         margin-left: 0.5rem;
     }
+
+
 }
+    .steps-wrapper.edit-page {
+        textarea {
+            margin: 0;
+        }
+        flex-direction: column;
+    }
 
 .edit-recipe-form {
     display: flex;
