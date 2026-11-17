@@ -5,9 +5,7 @@
     require '../inc/guard.php'; 
 
     $id = (int) get_value('id');
-
-
-
+   
     $errors = [];
  
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,6 +16,7 @@
                 $addedDescription = post_value('added-desc');
                 $addedCategory = post_value('added-category');
                 // $addedSteps = post_value('step');
+                //$addedImages = post_value('image??');
                 // fix this later
                 if($addedTitle === '') {
                     $errors[] = 'Recipe title is required.';
@@ -32,8 +31,9 @@
                     $errors[] = 'Recipe category is required.';
                 }  
                 // if($addedSteps === '') {
-                //     $errors[] = 'At least one step is required.';
+                //     $errors[] = 'At least one step is required.'; 
                 // }  
+                //the addedsteps requirement wasn't working?
                 try {
                     mysqli_execute_query(
                         $conn,
@@ -45,6 +45,11 @@
                             $steps = implode ('*', $step_list);
                             add_steps($conn, mysqli_insert_id($conn), $steps);
                         }
+                    // $images_list = $_POST['images'] ?? [];
+                    //     if ($image_list !== []) {
+                    //         $images = implode ('*', $images_list);
+                    //         add_images($conn, mysqli_insert_id($conn), $images);                           
+                    //     }
                     $error = 'Recipe submitted!';
                     header('Location: index.php');
                     exit;
@@ -53,9 +58,6 @@
                     $e->getMessage(); 
                 }
                     break;
-            
-
-
             case "delete":
                 $deleteId = post_value('delete-id');
                 try {
@@ -74,6 +76,38 @@
         }
         }
 
+        //image upload stuff
+        $upload_folder = 'images';
+        $results = [];
+        if (isset($_FILES['photos']['name']) && (is_array($_FILES['photos']['name']))){
+            $files = $_FILES['photos'];
+            foreach ($files['name'] as $i => $original_name) {
+                if ($files['error'][$i] = UPLOAD_ERR_NO_FILE) {
+                    continue;
+                }
+                try {
+                    $save = save_upload(
+                        $files['tmp_name'][$i],
+                        $files['original_name'][$i],
+                        $files['size'][$i],
+                        $files['error'][$i],
+                        $upload_folder
+                    );
+                    $results[] = [
+                        'name' => $original_name, 
+                        'saved'=>$saved,
+                        'message'=> 'Save as' . $saved
+                    ];
+                }
+                catch (RuntimeException $e) {
+                    $results[] = [
+                        'name' => $original_name, 
+                        'saved'=>null,
+                        $e => getMessage
+                    ];
+                }
+            }
+        }
 ?>
 
 
@@ -100,6 +134,11 @@
             </ul>
         </div>
     </nav>
+    <?php
+    echo '<pre>';
+    print_r($_FILES);
+    echo '</pre>';
+    ?>
     <main>
         <div class="text-wrapper">
             <br>
@@ -108,26 +147,44 @@
             <h2>Add Recipe</h2>
             <br>
             <br>
-            <form method = "post"> 
-                <h3>Title</h3>
+            <form method = "post" enctype = "multipart/form-data"> 
+                <h3>Title <span class="red">*</span></h3>
                 <input type= "text" id="added-title" name="added-title" value="">
-                <h3>Subtitle</h3>
+                <h3>Subtitle <span class="red">*</span></h3>
                 <input type= "text" id="added-subtitle" name="added-subtitle" value="">
-                <h3>Description</h3>
+                <h3>Description <span class="red">*</span></h3>
                 <input type= "text" id="added-desc" name="added-desc" value="">
-                <h3>Category (1 veg 2 fish 3 poultry 4 pork 5 beef)</h3>
+                <h3>Category <span class="red">*</span></h3>
                 <input type= "text" id="added-category" name="added-category" value="">
-                <h3>Steps</h3>
+                <!-- <select name="category" id="added-category" name="added-category" value="">
+                    <option value="1">Vegetarian</option>
+                    <option value="2">Fish</option>
+                    <option value="3">Poultry</option>
+                    <option value="4">Pork</option>
+                    <option value="5">Beef</option>
+                </select> -->
+                <!--can i get the value of a select the same way i can an input? 
+                i think for category a select makes sense more than a text input -->
+                <h3>Steps <span class="red">*</span></h3>
                 <fieldset id = "steps-fieldset">
                 </fieldset>
+                <h3>Images</h3>
+                <input type="file" name="photos[]" multiple>
                 <input type="hidden" name="form" id="form" value="add">
                 <div class="form-buttons">
                     <button type="button" id="add-step">Add Step</button>
-                    <!-- this button doesnt do anything -->
                     <button type="submit">Submit</button>
                     <br>
                 </div>
             </form>
+            <hr>
+            <?php foreach ($results as $result): ?>
+                <p>
+                    <?= e($result['name'])?>;
+                    <?= e($result['message'])?>
+            </p>
+            <?php endforeach ?>
+
             <?php if (!empty($error)): ?>
                 <p><?= e($error)?> </p>
             <?php endif?>
