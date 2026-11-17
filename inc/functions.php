@@ -144,7 +144,7 @@ function make_safe_name(
 ):string {
   $base = pathinfo($original_name, PATHINFO_FILENAME);
   $base = strtolower($base);
-  $base = preg_replace('/[^a-z0-9]+/','-', $base);
+  $base = preg_replace('/[^a-z0-9]+/]','-', $base);
   $base = trim($base, '-');
   $base = substr($base, 0-60);
   if ($base === '') {
