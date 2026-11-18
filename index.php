@@ -34,7 +34,7 @@
 
         <div class="search-filter-wrapper">
 
-            <!-- <div>
+            <div>
             <h2>Filter By:</h2>
             <select class="dropdown" name="Protein">
                 <option value>Vegetarian</option>
@@ -43,7 +43,7 @@
                 <option value>Pork</option>
                 <option value>Beef</option>
             </select>
-            </div> -->
+            </div>
             
             <div>
             <h2>Search Recipes:</h2>
