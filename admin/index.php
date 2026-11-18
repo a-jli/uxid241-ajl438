@@ -3,16 +3,12 @@
     require '../inc/database.php';
     require '../inc/functions.php'; 
     require '../inc/guard.php'; 
-
+    ini_set('display_errors', '1'); error_reporting(E_ALL);
     $id = (int) get_value('id');
-   
     $errors = [];
     $results = [];
 
-    // getting addedsteps to be an error (maybe not needed with the step input being required?)
-    // image upload...  i should be collecting all the safe names, putting * between them w/ implode
-    // then inserting that into the db?
-    // how would get the safe name of multiple uploads? my current one upload isnt working still
+
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch ($_POST['form']) {
@@ -21,9 +17,7 @@
                 $addedSubtitle = post_value('added-subtitle');
                 $addedDescription = post_value('added-desc');
                 $addedCategory = post_value('added-category');
-                // $addedSteps = post_value('step');
-                //$addedImages = post_value('image??');
-                // fix this later
+
                 if($addedTitle === '') {
                     $errors[] = 'Recipe title is required.';
                 }
@@ -36,12 +30,12 @@
                 if($addedCategory === '') {
                     $errors[] = 'Recipe category is required.';
                 }  
-                if($addedSteps === '') {
-                    $errors[] = 'At least one step is required.'; 
+                $step_list = array_filter(array_map('trim', $_POST['step'] ?? []));
+                if ($step_list === []) {
+                    $errors[] = 'At least one step is required.';
                 }
-                
                 try {
-                //image upload
+
                 $folder = '../assets/images';
                 if (isset($_FILES['photos']['name']) && (is_array($_FILES['photos']['name']))){
                     $files = $_FILES['photos'];
@@ -52,15 +46,16 @@
                         try {
                             $saved = save_upload(
                                 $files['tmp_name'][$i],
-                                'original_name',
+                                $original_name,
                                 $files['size'][$i],
                                 $files['error'][$i],
                                 $folder
                             );
+                            $saved_names[] = $saved;
                             $results[] = [
                                 'name' => $original_name, 
                                 'saved'=> $saved,
-                                'message'=> 'Save as' . $saved
+                                'message'=> 'saved as ' . $saved
                             ];
                         }
                         catch (RuntimeException $e) {
@@ -71,34 +66,38 @@
                             ];
                         }
                     }
+                    
                 }
 
-                // $images_list = $safe_name ?? []; 
-                //getting all the safe names from multiple uploads?
-                $images_list = $_POST['images'] ?? [];
-                if ($images_list !== []) {
-                    $images = implode ('*', $images_list);
-                    add_images($conn, $id, $images);                           
-                }
-
-                //title, etc upload
+                if ($errors === []) { 
+                    //title, etc upload
                     mysqli_execute_query(
                         $conn,
                         'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)',
                         [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
                     );
 
-                //steps upload
-                    $step_list = $_POST['step'] ?? [];
-                        if ($step_list !== []) {
-                            $steps = implode ('*', $step_list);
-                             add_steps($conn, $id, $steps);
-                        }
+                    $new_id = create_recipe($conn, $addedTitle, $addedSubtitle, $addedDescription, (int) $addedCategory); 
+                    //this is making it insert twice?
 
-                    $error = 'Recipe submitted!';
+                    // image upload
+                    if ($saved_names !== []) {
+                        $images = implode ('*', $saved_names);
+                        add_images($conn, $new_id, $images);                           
+                    }
+
+                    //steps upload
+                    $step_list = $_POST['step'] ?? [];
+                    if ($step_list !== []) {
+                        $steps = implode ('*', $step_list);
+                            add_steps($conn, $new_id, $steps);
+                    } 
+                        
                     header('Location: index.php');
                     exit;
-                    
+                 } else {
+                    $error = 'There was a problem with your submission.';
+                 }
                 } catch (mysqli_sql_exception $e) {
                     $error = 'There was a problem with your submission.';
                     $e->getMessage(); 
@@ -176,6 +175,7 @@
                     <option value="5">Beef</option>
                 </select>
                 <h3>Images</h3>
+                <p class="red"><i>Please upload one image per step, with the last image being the completed meal.</i></p>
                 <input type="file" name="photos[]" multiple>
                 <h3>Steps <span class="red">*</span></h3>
                 <fieldset id = "steps-fieldset">
@@ -193,8 +193,9 @@
             </form>
             <?php if ($results !== null) : ?>
                 <?php foreach ($results as $result): ?>
+                    <br>
                     <p>
-                        <?= e($result['name'])?>;
+                        <?= e($result['name'])?>
                         <?= e($result['message'])?>
                     </p>
                 <?php endforeach ?>

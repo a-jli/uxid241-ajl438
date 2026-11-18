@@ -20,13 +20,6 @@ function value_trim(string $key): string {
     return trim($_GET[$key] ?? '');
 }
 
-// function get_all_recipes (mysqli $conn):array {
-//     $sql = 'SELECT id, title FROM cookbook_recipes 
-//     ORDER BY id ASC';
-//     //change order here
-//     return mysqli_fetch_all(mysqli_query($conn, $sql), MYSQLI_ASSOC);
-// }
-
 function get_recipe (mysqli $conn, int $id):?array {
     $sql = 'SELECT cookbook_recipes.id, 
     cookbook_recipes.title, 
@@ -48,15 +41,13 @@ $result = mysqli_query($conn, 'SELECT cookbook_recipes.id,
     FROM cookbook_recipes
     INNER JOIN cookbook_categories ON cookbook_recipes.category_id = cookbook_categories.id
     ORDER BY id ASC');
-// join - query that reads matching rows from both tables together, inner means
-// only get rows where the match exists on both sides
 
 $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 //SEARCH FUNCTION???? ========================================================
 
-$food_searched = value_trim('q'); //trim query
-$food_results = []; // empty array
+$food_searched = value_trim('q'); 
+$food_results = []; 
 
 function search_recipe (mysqli $conn, string $q):array {
     $like = '%' . $q . '%';
@@ -75,8 +66,6 @@ function search_recipe (mysqli $conn, string $q):array {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-
-
 //ADMIN FEATURES ========================================================
 
 function create_recipe(mysqli $conn, string $title, string $subtitle, string $description, int $category_id): int {
@@ -84,11 +73,6 @@ function create_recipe(mysqli $conn, string $title, string $subtitle, string $de
   mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $category_id]);
   return (int) mysqli_insert_id($conn);
 }
-
-// function update_title(mysqli $conn, int $id, string $title): void {
-//   $sql = 'UPDATE cookbook_recipes SET title = ? WHERE id = ?';
-//   mysqli_execute_query($conn, $sql, [$title, $id]);
-// }
 
 function update_recipe(mysqli $conn, int $id, string $title, string $subtitle, string $description): void {
   $sql = 'UPDATE cookbook_recipes 
@@ -132,25 +116,35 @@ function save_upload (
     'image/png' => 'png',
     'image/webp' => 'webp'
   );
+
   if (!isset($ext_map[$mime])) {
     throw new RuntimeException('Type not allowed.');
   } 
 
-  function make_safe_name(
+  $ext = $ext_map[$mime];
+
+  $safe_name  = make_safe_name($original_name, $ext, $folder);
+  if (!move_uploaded_file($tmp_name, $folder . '/' . $safe_name)) {
+      throw new RuntimeException('Could not save file.');
+  }
+
+  return $safe_name;
+}
+
+function make_safe_name(
     string $original_name,
     string $ext,
     string $folder
   ):string {
-    $base = pathinfo($original_name, PATHINFO_FILENAME);
-    $base = strtolower($base);
-    $base = preg_replace('/[^a-z0-9]+/]','-', $base);
-    $base = trim($base, '-');
-    $base = substr($base, 0-60);
-    if ($base === '') {
-      $base = 'upload';
-    }
+  $base = pathinfo($original_name, PATHINFO_FILENAME);
+  $base = strtolower($base);
+  $base = preg_replace('/[^a-z0-9]+/','-', $base);
+  $base = trim($base, '-');
+  $base = substr($base, 0, 60);
+  if ($base === '') {
+    $base = 'upload';
   }
-
+  
   $safe_name = $base . '.' . $ext;
   $counter = 1;
 
@@ -158,17 +152,6 @@ function save_upload (
     $safe_name = $base . '-' . $counter . '.' . $ext;
     $counter++;
   }
-
   return $safe_name;
-
-  $ext = $ext_map[$mime];
-  return $mime;
-  $safe_name  = make_safe_name($original_name, $ext, $folder);
-  if (!move_uploaded_file ($tmp_name, $folder . '/' . $safe_name)){
-      throw new RuntimeException('Could not save file.');
-  }
-
 }
-
-
 

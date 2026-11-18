@@ -128,16 +128,15 @@
                     <?php $steps = explode ('*', $recipe['steps']);?>
                     <?php $images = explode ('*', $recipe['images']);?>
                         <?php foreach ($steps as $i => $step): ?>
-                            <div class="steps-wrapper vertical">
+                            <div class="steps-wrapper">
                                 <?php if ($recipe['images'] === ''): ?>
                                 <?php else: ?>
-                                    <img src="../assets/images/<?= e($images[$i + 1]) ?>" alt="">
+                                    <img src="../assets/images/<?= e($images[$i]) ?>" alt="">
                                 <?php endif ?>
-                                <h3 class="step-number" >Step <?=$i + 1?></h3>
-                                <!-- make this work with added inputs, 
-                                 have it update stepNumber somehow?
-                                 the stepnumber stuff is in js, while this is php?-->
-                                <p><?= e($step) ?></p>
+                                <div class="step-text">
+                                    <h3 class="step-number" >Step <?=$i + 1?></h3>
+                                    <p><?= e($step) ?></p>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
