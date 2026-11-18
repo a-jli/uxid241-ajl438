@@ -48,12 +48,16 @@
         </div>
     </nav>
     <main>
+        <div class="text-wrapper">
         <h1>Register</h1>
-       <form method = "post">
+        <br>
+        <form method = "post">
             <input type="email" name="email" placeholder="email" required>
-            <input type="password" name="password" placeholder="password" required>
+            <input class="flip" type="password" name="password" placeholder="password" required>
             <button type="submit">Submit</button>
-        </form>
+        </form>   
+        </div>
+
 
     </main>
 </body>

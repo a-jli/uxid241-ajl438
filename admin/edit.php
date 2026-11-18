@@ -14,7 +14,13 @@
                 $steps = implode ('*', $step_list);
                 add_steps($conn, mysqli_insert_id($conn), $steps);
             }            
-        
+    
+            $step_list = $_POST['step'] ?? [];
+                if ($step_list !== []) {
+                    $steps = implode ('*', $step_list);
+                    // add_steps($conn, mysqli_insert_id($conn), $steps);
+                        add_steps($conn, $id, $steps);
+                }
         header('Location: index.php');
             exit;
         }
@@ -69,7 +75,7 @@
                     <?php foreach ($steps as $i => $step): ?>
                         <div class="steps-wrapper edit-page">
                             <label class="step-number smaller" >Step <?=$i + 1?></label>
-                            <textarea type= "text" id="step-<?= $i + 1?>" name="step">
+                            <textarea type= "text" id="step-<?= $i + 1?>" name="step[]">
                                 <?= e($step) ?>
                             </textarea>
                         </div>

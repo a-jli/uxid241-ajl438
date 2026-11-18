@@ -55,16 +55,21 @@
         </div>
     </nav>
     <main>
-        <h1>Login</h1>
-       <form method = "post">
-            <input type="email" name="email" placeholder="email" required>
-            <input type="password" name="password" placeholder="password" required>
-            <button type="submit">Submit</button>
-        </form>
-        <a href="register.php">No Account? Register Here!</a>
-        <?php if (!empty($error)): ?>
-            <p><?= e($error)?> </p>
-        <?php endif?>
+
+        <div class="text-wrapper">
+            <h1>Login</h1>
+        <form method = "post">
+                <input type="email" name="email" placeholder="email" required>
+                <input class="flip" type="password" name="password" placeholder="password" required>
+                <button type="submit">Submit</button>
+            </form>
+            <br>
+            <a href="register.php">No Account? Register Here!</a>
+            <?php if (!empty($error)): ?>
+                <p><?= e($error)?> </p>
+            <?php endif?>
+        </div>
+
     </main>
 </body>
 </html>

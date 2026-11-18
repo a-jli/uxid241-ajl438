@@ -2,13 +2,13 @@ console.log('connected');
 
 const btnAddStep = document.querySelector('#add-step');
 const stepsFieldset = document.querySelector('#steps-fieldset');
-let stepCount = 0;
+let stepCount = stepsFieldset ? stepsFieldset.querySelectorAll('textarea').length : 0;
 
 function addStepInput() {
     const div = document.createElement('div');
     const label = document.createElement('label');
     label.setAttribute('for', 'Step ${stepCount}');
-    label.textContent = (`Step ${stepCount + 2}`);
+    label.textContent = (`Step ${stepCount + 1}`);
     const textarea = document.createElement('textarea');
     textarea.type='text';
     textarea.required = true;
