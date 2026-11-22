@@ -17,6 +17,10 @@
                 $addedSubtitle = post_value('added-subtitle');
                 $addedDescription = post_value('added-desc');
                 $addedCategory = post_value('added-category');
+                $addedServings = post_value('added-servings');
+                $addedTime = post_value('added-time');
+                $addedCalories = post_value('added-calories');
+                $addedIngredients = post_value('added-ingredients');
 
                 if($addedTitle === '') {
                     $errors[] = 'Recipe title is required.';
@@ -30,12 +34,22 @@
                 if($addedCategory === '') {
                     $errors[] = 'Recipe category is required.';
                 }  
+                if($addedServings === '') {
+                    $errors[] = 'Serving information is required.';
+                } 
+                if($addedCalories === '') {
+                    $errors[] = 'Calorie information is required.';
+                } 
+                if($addedIngredients === '') {
+                    $errors[] = 'Recipe ingredients are required.';
+                } 
                 $step_list = array_filter(array_map('trim', $_POST['step'] ?? []));
                 if ($step_list === []) {
                     $errors[] = 'At least one step is required.';
                 }
-                try {
 
+                try {
+                $saved_names[] = [];
                 $folder = '../assets/images';
                 if (isset($_FILES['photos']['name']) && (is_array($_FILES['photos']['name']))){
                     $files = $_FILES['photos'];
@@ -70,15 +84,7 @@
                 }
 
                 if ($errors === []) { 
-                    //title, etc upload
-                    mysqli_execute_query(
-                        $conn,
-                        'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)',
-                        [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
-                    );
-
-                    $new_id = create_recipe($conn, $addedTitle, $addedSubtitle, $addedDescription, (int) $addedCategory); 
-                    //this is making it insert twice?
+                    $new_id = create_recipe($conn, $addedTitle, $addedSubtitle, $addedDescription, (int)$addedCategory, $addedServings, $addedTime, $addedCalories); 
 
                     // image upload
                     if ($saved_names !== []) {
@@ -174,9 +180,21 @@
                     <option value="4">Pork</option>
                     <option value="5">Beef</option>
                 </select>
+                <div class="horizontal">
+                    <div>
+                        <h3>Time <span class="red">*</span></h3>
+                            <input type= "text" id="added-time" name="added-time" value="">
+                    </div>
+                    <div>
+                        <h3>Calories <span class="red">*</span></h3>
+                        <input type= "text" id="added-calories" name="added-calories" value="">
+                    </div>
+                </div>
                 <h3>Images</h3>
-                <p class="red"><i>Please upload one image per step, with the last image being the completed meal.</i></p>
-                <input type="file" name="photos[]" multiple>
+                    <p class="red"><i>Please upload one image per step, with the last image being the completed meal.</i></p>
+                    <input type="file" name="photos[]" multiple>
+                <h3>Ingredients <span class="red">*</span></h3>
+                    <textarea required id="added-ingredients" name="added-ingredients" value=""></textarea>
                 <h3>Steps <span class="red">*</span></h3>
                 <fieldset id = "steps-fieldset">
                     <div>
@@ -200,12 +218,12 @@
                     </p>
                 <?php endforeach ?>
             <?php endif?>
-
+            <br>
             <?php if (!empty($error)): ?>
-                <p><?= e($error)?> </p>
+                <p class="red"><strong><?= e($error)?></strong> </p>
             <?php endif?>
             <?php foreach ($errors as $error) : ?>
-                <p><?= ($error);?></p>
+                <p class="red"><?= ($error);?></p>
             <?php endforeach; ?>
             <?php 
 

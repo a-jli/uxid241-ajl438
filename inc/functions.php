@@ -1,6 +1,52 @@
 <?php
 declare(strict_types=1);
 
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+// Fallback for servers running PHP older than 8.2 (such as the school's digm
+// server), where mysqli_execute_query() doesn't exist yet. It does the same
+// job with older mysqli functions: prepare the SQL, bind each value to its ?,
+// then run it. On PHP 8.2 and newer the real function exists, so this block
+// is skipped.
+if (!function_exists('mysqli_execute_query')) {
+function mysqli_execute_query(mysqli $mysql, string $query, ?array $params = null): mysqli_result|bool {
+// Keep the latest statement alive until the next query, so
+// mysqli_affected_rows() and mysqli_insert_id() still report its result
+// (closing it would reset them).
+static $last_statement = null;
+
+ 
+$statement = mysqli_prepare($mysql, $query);
+$last_statement = $statement;
+
+ 
+if ($params !== null && $params !== []) {
+$types = '';
+foreach ($params as $value) {
+$types .= is_int($value) ? 'i' : (is_float($value) ? 'd' : 's');
+}
+$values = array_values($params);
+mysqli_stmt_bind_param($statement, $types, ...$values);
+}
+
+ 
+mysqli_stmt_execute($statement);
+
+ 
+// INSERT, UPDATE and DELETE return no rows: report success with true,
+// like the real function, without asking for a result.
+if (mysqli_stmt_result_metadata($statement) === false) {
+return true;
+}
+
+ 
+return mysqli_stmt_get_result($statement);
+}
+}
+
+
 // var_dump($_GET);
 // var_dump($_POST);
 
@@ -66,13 +112,41 @@ function search_recipe (mysqli $conn, string $q):array {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-//ADMIN FEATURES ========================================================
+function filter_recipe (mysqli $conn, string $q): array {
+    $like = '%' . $q . '%';
+    $result = mysqli_execute_query(
+        $conn,
+        'SELECT cookbook_categories.name AS category
+        FROM cookbook_recipes
+        INNER JOIN cookbook_categories
+        ON cookbook_recipes.category_id = cookbook_categories.id
+        WHERE cookbook_recipes.cookbook_categories LIKE ?
+        ORDER BY cookbook_recipes.id ASC',
+        [$like]
+    );
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);  
+}
 
-function create_recipe(mysqli $conn, string $title, string $subtitle, string $description, int $category_id): int {
-  $sql = 'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)';
-  mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $category_id]);
+//ADMIN FEATURES ========================================================
+function create_recipe(mysqli $conn, 
+string $title, 
+string $subtitle, 
+string $description, 
+string $ingredients, 
+int $category_id, 
+int $servings, 
+int $time, 
+int $calories): int {
+  $sql = 'INSERT INTO cookbook_recipes (title, subtitle, ingredients, description, category_id, servings, time, calories) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $ingredients, $category_id, $servings, $time, $calories]);
   return (int) mysqli_insert_id($conn);
 }
+
+// mysqli_execute_query(
+//     $conn,
+//     'INSERT INTO cookbook_recipes (title, subtitle, description, category_id) VALUES (?, ?, ?, ?)',
+//     [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
+// );
 
 function update_recipe(mysqli $conn, int $id, string $title, string $subtitle, string $description): void {
   $sql = 'UPDATE cookbook_recipes 
@@ -93,6 +167,8 @@ function add_images (mysqli $conn, int $id, string $images): void {
   $sql = 'UPDATE cookbook_recipes SET images = ? WHERE id = ?';
   mysqli_execute_query($conn, $sql, [$images, $id]);
 }
+
+
 
 // image upload
 function save_upload (
