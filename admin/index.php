@@ -84,7 +84,8 @@
                 }
 
                 if ($errors === []) { 
-                    $new_id = create_recipe($conn, $addedTitle, $addedSubtitle, $addedDescription, (int)$addedCategory, $addedServings, $addedTime, $addedCalories); 
+                    $new_id = create_recipe($conn, $addedTitle, $addedSubtitle, $addedDescription, (int)$addedCategory, $addedServings, $addedTime, $addedCalories, $addedIngredients); 
+                    //Argument #5 ($ingredients) must be of type string, int given???
 
                     // image upload
                     if ($saved_names !== []) {
@@ -182,12 +183,16 @@
                 </select>
                 <div class="horizontal">
                     <div>
-                        <h3>Time <span class="red">*</span></h3>
-                            <input type= "text" id="added-time" name="added-time" value="">
+                        <h3>Servings <span class="red">*</span></h3>
+                        <input type= "number" min="1" max="12" id="added-servings" name="added-servings" value="">
+                    </div>
+                    <div>
+                        <h3>Time<span class="red">*</span></h3>
+                            <input type= "number" min="1" max="240" id="added-time" name="added-time" value="">
                     </div>
                     <div>
                         <h3>Calories <span class="red">*</span></h3>
-                        <input type= "text" id="added-calories" name="added-calories" value="">
+                        <input type= "number" min="100" max="2000" id="added-calories" name="added-calories" value="">
                     </div>
                 </div>
                 <h3>Images</h3>

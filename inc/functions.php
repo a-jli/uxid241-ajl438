@@ -16,11 +16,9 @@ function mysqli_execute_query(mysqli $mysql, string $query, ?array $params = nul
 // mysqli_affected_rows() and mysqli_insert_id() still report its result
 // (closing it would reset them).
 static $last_statement = null;
-
  
 $statement = mysqli_prepare($mysql, $query);
 $last_statement = $statement;
-
  
 if ($params !== null && $params !== []) {
 $types = '';
@@ -31,24 +29,20 @@ $values = array_values($params);
 mysqli_stmt_bind_param($statement, $types, ...$values);
 }
 
- 
 mysqli_stmt_execute($statement);
-
  
 // INSERT, UPDATE and DELETE return no rows: report success with true,
 // like the real function, without asking for a result.
 if (mysqli_stmt_result_metadata($statement) === false) {
 return true;
 }
-
  
 return mysqli_stmt_get_result($statement);
 }
 }
 
-
-// var_dump($_GET);
-// var_dump($_POST);
+var_dump($_GET);
+var_dump($_POST);
 
 function e(string $value): string { 
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); 
@@ -93,7 +87,13 @@ $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 //SEARCH FUNCTION???? ========================================================
 
 $food_searched = value_trim('q'); 
+$food_filtered = value_trim('protein');
+
 $food_results = []; 
+$filter_results = []; 
+
+echo 'filtered category $food_filtered is ' . $food_filtered;
+
 
 function search_recipe (mysqli $conn, string $q):array {
     $like = '%' . $q . '%';
@@ -112,32 +112,51 @@ function search_recipe (mysqli $conn, string $q):array {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-function filter_recipe (mysqli $conn, string $q): array {
-    $like = '%' . $q . '%';
-    $result = mysqli_execute_query(
-        $conn,
-        'SELECT cookbook_categories.name AS category
+function filter_recipe (mysqli $conn, string $protein):array {
+    $like = '%' . $protein . '%';
+    echo 'protein is ' . $protein . '! ';
+    $filter_results =  mysqli_execute_query(
+      $conn,
+        'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle,
+                cookbook_categories.name AS category, description, servings, time,
+                calories, ingredients, steps, images
         FROM cookbook_recipes
         INNER JOIN cookbook_categories
         ON cookbook_recipes.category_id = cookbook_categories.id
-        WHERE cookbook_recipes.cookbook_categories LIKE ?
-        ORDER BY cookbook_recipes.id ASC',
-        [$like]
+      WHERE cookbook_recipes.category_id LIKE ?
+      ORDER BY cookbook_recipes.id ASC',
+      [$like]
     );
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);  
+    // foreach($filter_results as $row) {
+    //   print_r($row);
+    // }//this does give all the recipes by category, so im unsure why the actual thing isnt working...
+    return mysqli_fetch_all($filter_results, MYSQLI_ASSOC);
 }
+
 
 //ADMIN FEATURES ========================================================
 function create_recipe(mysqli $conn, 
-string $title, 
-string $subtitle, 
-string $description, 
-string $ingredients, 
-int $category_id, 
-int $servings, 
-int $time, 
-int $calories): int {
-  $sql = 'INSERT INTO cookbook_recipes (title, subtitle, ingredients, description, category_id, servings, time, calories) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    string $title, 
+    string $subtitle, 
+    string $description, 
+    string $ingredients,
+    //Argument #5 ($ingredients) must be of type string, int given???
+    int $category_id, 
+    int $servings, 
+    int $time, 
+    int $calories
+   ): int {
+  $sql = 'INSERT INTO cookbook_recipes (
+    title, 
+    subtitle, 
+    description,
+    ingredients,
+    category_id,
+    servings, 
+    time, 
+    calories 
+) 
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $ingredients, $category_id, $servings, $time, $calories]);
   return (int) mysqli_insert_id($conn);
 }
@@ -167,8 +186,6 @@ function add_images (mysqli $conn, int $id, string $images): void {
   $sql = 'UPDATE cookbook_recipes SET images = ? WHERE id = ?';
   mysqli_execute_query($conn, $sql, [$images, $id]);
 }
-
-
 
 // image upload
 function save_upload (

@@ -1,16 +1,15 @@
 <?php
     declare(strict_types=1);
 
- ini_set('display_errors', '1');
- ini_set('display_startup_errors', '1');
- error_reporting(E_ALL);
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL);
  
     require 'inc/database.php';
     require 'inc/functions.php';
 
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
-
 
 
 ?>
@@ -42,26 +41,39 @@
 
         <div class="search-filter-wrapper">
 
-            <div>
+            <!-- <div>
             <h2>Filter By:</h2>
-            <select class="dropdown" name="Protein">
-                <option value>Vegetarian</option>
-                <option value>Fish</option>
-                <option value>Poultry</option>
-                <option value>Pork</option>
-                <option value>Beef</option>
+            <form action="index.php" method = "GET">
+            <select class="dropdown" name="protein" onchange="">
+                <option value="">All</option>
+                <option value="1">Vegetarian</option>
+                <option value="2">Fish</option>
+                <option value="3">Poultry</option>
+                <option value="4">Pork</option>
+                <option value="5">Beef</option>
             </select>
-            </div>
+            <button type="submit">Filter</button>
+            </form>
+            </div> -->
             
             <div>
-            <h2>Search Recipes:</h2>
+            <h2>Search and Filter:</h2>
             <form action="index.php" method = "GET"> 
                 <input type= "search" id="q" name="q" value="<?= e($food_searched) ?>">
-                <button type="submit">Search</button>
+                <select class="dropdown" name="protein" id = "protein">
+                    <option value="">All</option>
+                    <option value="1">Vegetarian</option>
+                    <option value="2">Fish</option>
+                    <option value="3">Poultry</option>
+                    <option value="4">Pork</option>
+                    <option value="5">Beef</option>
+                </select>
+                <button type="submit">Find Recipe</button>
             </form>                
             </div>
         </div>
-        <?php if ($food_searched !== '') : ?>
+        <?php if ($food_searched !== '' && $food_filtered === '') : ?>
+            <p>searching only!</p>
             <div class="recipes-grid">
             <?php $food_results = search_recipe($conn, $food_searched);?>
             <?php foreach ($food_results as $food_result):?>
@@ -85,10 +97,18 @@
                     </div>
                 <?php endforeach; ?>    
             </div>
-        <?php elseif ($food_searched !== '' && $food_results === []):?>
-            <p>nothing</p>
-        <!-- ok make this actually work-->
+        <?php elseif ($food_searched === '' && $food_filtered !== ''):?>
+            <p>filtering only!</p>
+            <div class="recipes-grid">
+            <?php $food_results = filter_recipe($conn, $food_filtered);?>
+            <?php foreach ($filter_results as $filter_result):?>
+                    <p><?= e($filter_result['title']); ?></p>
+                <?php endforeach; ?>    
+            </div>
+        <?php elseif ($food_searched !== '' && $food_filtered !== ''):?>
+            <p>filtering and searching!</p>
         <?php else: ?>
+            <p>all recipes!</p>
             <div class="recipes-grid">
                 <?php foreach ($recipes as $recipe):?>
                     <?php $images = explode ('*', $recipe['images']);?>
@@ -119,10 +139,8 @@
 </html>
 
 <!-- 
-TODO
-- [DONE] make images not needed on recipe page
-- [] admin input
-- [] admin edit
-- [] admin delete
-- [DONE] search w/ prepared statement
+TODO:
+- [] filter feature
+- [] full edit and submit recipe
+- [] upload all images
 -->
