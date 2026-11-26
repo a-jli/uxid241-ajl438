@@ -81,40 +81,13 @@ $result = mysqli_query($conn, 'SELECT cookbook_recipes.id,
 
 $recipes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-//SEARCH FUNCTION???? ========================================================
+//SEARCH FUNCTION ========================================================
 
 $food_searched = value_trim('q'); 
 $food_filtered = value_trim('protein');
-
+$food_filtered = (int) $food_filtered;
 $food_results = []; 
 $filter_results = []; 
-
-// echo 'filtered category $food_filtered is ' . $food_filtered;
-
-function find_recipes(mysqli $conn, string $q, int $category_id): array {
-  $sql = 'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle,
-      cookbook_categories.name AS category, calorie, time, images
-    FROM cookbook_recipes
-    INNER JOIN cookbook_categories
-      ON cookbook_recipes.category_id = cookbook_categories.id
-    WHERE 1 = 1'; //always true so every condition starts w/ and
-  $parameters = [];
-
-  if (q !== '') { //searching by title, sub, or desc
-    $sql .= 'AND (cookbook_recipes.title LIKE ? OR cookbook_recipes.subtitle LIKE ? OR cookbook_recipes.description LIKE ?)';
-    $like = '%' . $q . '%';
-    $parameters[] =  $like;
-    $parameters[] =  $like;
-    $parameters[] =  $like;
-  }
-  if ($category_id > 0) {
-    $sql .= 'AND cookbook_recpes.category_id = ?';
-    $parameters[] = $category_id;
-  }
-
-  $sql .= ' ORDER BY cookbook_recipes.id ASC';
-  return mysqli_fetch_all(mysqli_execute_query($conn, $sql, $parameters), MYSQLI_ASSOC);
-}
 
 function search_recipe (mysqli $conn, string $q):array {
     $like = '%' . $q . '%';
@@ -133,25 +106,29 @@ function search_recipe (mysqli $conn, string $q):array {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-function filter_recipe (mysqli $conn, string $protein):array {
-    $like = '%' . $protein . '%';
-    echo 'protein is ' . $protein . '! ';
-    $filter_results =  mysqli_execute_query(
-      $conn,
-        'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle,
-                cookbook_categories.name AS category, description, servings, time,
-                calories, ingredients, steps, images
-        FROM cookbook_recipes
-        INNER JOIN cookbook_categories
-        ON cookbook_recipes.category_id = cookbook_categories.id
-      WHERE cookbook_recipes.category_id = ?
-      ORDER BY cookbook_recipes.id ASC',
-      [$like]
-    );
+function find_recipe(mysqli $conn, string $q, int $category_id): array {
+    $sql = 'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle,
+                   cookbook_categories.name AS category, calories, servings, time, images
+            FROM cookbook_recipes
+            INNER JOIN cookbook_categories
+              ON cookbook_recipes.category_id = cookbook_categories.id
+            WHERE 1 = 1';
+    $params = [];
 
-    return mysqli_fetch_all($filter_results, MYSQLI_ASSOC);
+    if ($q !== '') {
+        $sql .= ' AND (cookbook_recipes.title LIKE ? OR cookbook_recipes.description LIKE ?)';
+        $like = '%' . $q . '%';
+        $params[] = $like;
+        $params[] = $like;
+    }
+    if ($category_id > 0) {
+        $sql .= ' AND cookbook_recipes.category_id = ?';
+        $params[] = $category_id;
+    }
+
+    $sql .= ' ORDER BY cookbook_recipes.id ASC';
+    return mysqli_fetch_all(mysqli_execute_query($conn, $sql, $params), MYSQLI_ASSOC);
 }
-
 
 //ADMIN FEATURES ========================================================
 function create_recipe(mysqli $conn, 

@@ -11,6 +11,18 @@
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
 
+    $min = 1;
+    $max = 40;
+    $randomId = rand($min, $max);
+
+    $getRandomId = mysqli_query($conn, 
+    'SELECT cookbook_recipes.id 
+    FROM cookbook_recipes 
+    ORDER BY RAND() LIMIT 1');
+
+    $randomId = mysqli_fetch_all($getRandomId, MYSQLI_ASSOC);
+    print_r($randomId);
+    //Undefined array key "id"
 ?>
 
 <!DOCTYPE html>
@@ -27,10 +39,10 @@
     <nav>
         <div class="nav-wrapper">
             <a href="index.php"><h1>IDM 232 Cookbook</h1></a>
+            <hr class="hidden-hr">
             <ul>
                 <li><a href="index.php">HOME</a></li>
-                <li><a href="all-recipes.php">ALL RECIPES</a></li>
-                <li><a href="surprise.php">SUPRPISE ME</a></li>
+                <li><a href="recipe.php?id=<?=$randomId['id']?>">SUPRPISE ME</a></li>
                 <li><a href="help.php">HELP</a></li>
                 <li><a href="login.php">LOGIN</a></li>
             </ul>
@@ -38,8 +50,7 @@
     </nav>
     <main>
 
-        <div class="search-filter-wrapper">
-           
+        <div class="search-filter-wrapper">   
             <form action="index.php" method = "GET">
                 <div> 
                 <h3>Search:</h3>
@@ -58,13 +69,16 @@
                 </select>
                 </div>
                 <button type="submit">Find Recipe</button>
-            </form>                
-            
-        </div>
-        <?php if ($food_searched !== '' && $food_filtered === '') : ?>
-            <p>searching only!</p>
+            </form>    
+        </div>           
+            <?php $food_results = find_recipe($conn, $food_searched, $food_filtered);?>
+            <?php if (empty($food_results)): ?>
+                <div class="text-wrapper">
+                    <br>
+                    <p class="centered">No results! Try something else?</p>
+                </div>
+            <?php else: ?>
             <div class="recipes-grid">
-            <?php $food_results = search_recipe($conn, $food_searched);?>
             <?php foreach ($food_results as $food_result):?>
                     <?php $images = explode ('*', $food_result['images']);?>
                     <div class="recipe-wrapper"> 
@@ -87,61 +101,7 @@
                     </div>
                 <?php endforeach; ?>    
             </div>
-        <?php elseif ($food_searched === '' && $food_filtered !== ''):?>
-            <p>filtering only!</p>
-            <div class="recipes-grid">
-            <?php $food_results = filter_recipe($conn, $food_filtered);?>
-            <?php foreach ($food_results as $food_result):?>
-                    <?php $images = explode ('*', $food_result['images']);?>
-                    <div class="recipe-wrapper"> 
-                        <div class="recipe-header">
-                            <div class="recipe-header-img">
-                                <img src="assets/images/<?= e(end($images)) ?>" alt="">
-                            </div>
-                            <div class="non-img">
-                                <h3 class="title"><?= e($food_result['title']) . '<br>'; ?></h3> 
-                                <h4 class="subtitle"><?= e($food_result['subtitle']) . '<br>'; ?></h4> 
-                                <div class="recipe-wrapper-pill">
-                                    <p class="category"><?= e($food_result['category']); ?></p> 
-                                    <p class="servings"><?= ($food_result['servings']);?> Servings</p>
-                                    <p class="calories"><?= ($food_result['calories']);?>cal</p>
-                                    <p class="time"><?= ($food_result['time']); ?> min</p>
-                                </div>
-                            </div>
-                        </div>  
-                        <a class="view-recipe-btn" href="recipe.php?id=<?= $food_result['id']?>">View Recipe</a>
-                    </div>
-                <?php endforeach; ?>    
-            </div>
-        <?php elseif ($food_searched !== '' && $food_filtered !== ''):?>
-            <p>filtering and searching!</p>
-        <?php else: ?>
-            <p>All recipes!</p>
-            <div class="recipes-grid">
-                <?php foreach ($recipes as $recipe):?>
-                    <?php $images = explode ('*', $recipe['images']);?>
-                    <div class="recipe-wrapper"> 
-                        <div class="recipe-header">
-                            <div class="recipe-header-img">
-                                <img src="assets/images/<?= e(end($images)) ?>" alt="">
-                            </div>
-                            <div class="non-img">
-                                <h3 class="title"><?= e($recipe['title']) . '<br>'; ?></h3> 
-                                <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
-                                <div class="recipe-wrapper-pill">
-                                    <p class="category"><?= e($recipe['category']); ?></p> 
-                                    <p class="servings">Serves <?= e($recipe['servings']);?></p>
-                                    <p class="calories"><?= e($recipe['calories']);?>cal</p>
-                                    <p class="time"><?= e($recipe['time']); ?> min</p>
-                                </div>
-                            </div>
-                        </div>  
-                        <a class="view-recipe-btn" href="recipe.php?id=<?= $recipe['id']?>">View Recipe</a>
-                    </div>
-                <?php endforeach; ?>      
-            </div>
-        
-        <?php endif; ?>
+            <?php endif ?>
     </main>
     <script src="../assets/script.js"></script>
 </body>
@@ -149,9 +109,13 @@
 
 <!-- 
 TODO:
-- [] filter feature
+- [DONE] filter feature
 - [DONE] full edit 
 - [DONE] submit recipe
 - [] upload all images
 - [] delete confirm
+- [] index dropdown staying
+- [] prevent duplicate email submissions?
+- [] undefined array key id for randomrecipe
+- [] using php to repeat header/footers?
 -->

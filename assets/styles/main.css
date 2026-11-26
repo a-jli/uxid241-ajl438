@@ -41,6 +41,7 @@ nav {
         }
     }
     li {
+        text-wrap: nowrap;
         padding: 0 1rem 0 1rem;
         width: 100%;
         text-align: center;
@@ -211,6 +212,7 @@ form {
 
 .no-gap {
     gap: 0;
+    justify-content: center;
     input {
         border-radius: 0.5rem 0rem 0rem 0.5rem;
     }
@@ -378,6 +380,12 @@ button.submit-btn {
 
 .smallgap {
     gap: 0.25rem;
+    h1 {
+        text-align: center;
+    }
+}
+.centered {
+    text-align: center;
 }
 
 .hero-image {
@@ -537,6 +545,9 @@ fieldset {
     }
 }
 
+.hidden-hr {
+    display: none;
+}
 
 @media screen and (max-width: 1600px) {
     .recipes-grid {
@@ -561,6 +572,7 @@ fieldset {
 @media screen and (max-width: 820px) {
     .recipes-grid {
         display: grid;
+        padding: 1rem;
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -569,9 +581,18 @@ fieldset {
     }
 
     .search-filter-wrapper {
+        width: 80%;
         flex-direction: column;
-        select {
+        * {
             width: 100%;
+        }
+        form {
+            width: 100%;
+            flex-direction: column;
+            gap: 0.25rem;
+            button {
+                padding: 0.5rem;
+            }
         }
     }
 }
@@ -583,14 +604,35 @@ fieldset {
     }
 
     nav {
+        .hidden-hr {
+            display: flex;
+        }
         align-items: center;
             ul {
             flex-direction: column;
             padding: 0;
+            gap: 0.5rem;
             li {
+                background-color: var(--yellow); 
+                padding: 1rem;
                 width: 100%;
-                text-align: left;
+                border-radius: 0.25rem;
+                text-align: center;
+                font-size: 1rem;
+                a, a:visited {
+                    color: var(--off-black);
+                 }
+            transition: 200ms ease-out;
+            }
+            li:hover {
+                cursor: pointer;
+                background-color: var(--light-orange);
+            }
+            li:active { 
+                background-color: var(--darker-orange);
             }
         }
     }
+
+
 }

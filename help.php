@@ -21,7 +21,7 @@
                 <li><a href="all-recipes.php">ALL RECIPES</a></li>
                 <li><a href="surprise.php">SUPRPISE ME</a></li>
                 <li><a href="help.php">HELP</a></li>
-                <li><a href="index.php">LOGIN</a></li>
+                <li><a href="login.php">LOGIN</a></li>
             </ul>
         </div>
     </nav>
