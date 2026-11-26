@@ -21,6 +21,10 @@
                 $addedTime = post_value('added-time');
                 $addedCalories = post_value('added-calories');
                 $addedIngredients = post_value('added-ingredients');
+                    // ingredients
+                    $lines = preg_split('/\R/', $addedIngredients);
+                    $lines = array_filter(array_map('trim', $lines));
+                    $ingredients = implode('*', $lines);
 
                 if($addedTitle === '') {
                     $errors[] = 'Recipe title is required.';
@@ -33,6 +37,9 @@
                 } 
                 if($addedCategory === '') {
                     $errors[] = 'Recipe category is required.';
+                } 
+                if($addedTime === '') {
+                    $errors[] = 'Recipe time is required.';
                 }  
                 if($addedServings === '') {
                     $errors[] = 'Serving information is required.';
@@ -49,7 +56,7 @@
                 }
 
                 try {
-                $saved_names[] = [];
+                $saved_names = [];
                 $folder = '../assets/images';
                 if (isset($_FILES['photos']['name']) && (is_array($_FILES['photos']['name']))){
                     $files = $_FILES['photos'];
@@ -79,13 +86,20 @@
                                 'message' => $e->getMessage()
                             ];
                         }
-                    }
-                    
+                    }   
                 }
 
                 if ($errors === []) { 
-                    $new_id = create_recipe($conn, $addedTitle, $addedSubtitle, $addedDescription, (int)$addedCategory, $addedServings, $addedTime, $addedCalories, $addedIngredients); 
-                    //Argument #5 ($ingredients) must be of type string, int given???
+                    $new_id = create_recipe($conn, 
+                        $addedTitle, 
+                        $addedSubtitle, 
+                        $addedDescription, 
+                        $ingredients,
+                        (int) $addedCategory, 
+                        (int) $addedServings, 
+                        (int) $addedTime, 
+                        (int) $addedCalories 
+                        ); 
 
                     // image upload
                     if ($saved_names !== []) {
@@ -99,6 +113,8 @@
                         $steps = implode ('*', $step_list);
                             add_steps($conn, $new_id, $steps);
                     } 
+
+
                         
                     header('Location: index.php');
                     exit;
@@ -199,6 +215,7 @@
                     <p class="red"><i>Please upload one image per step, with the last image being the completed meal.</i></p>
                     <input type="file" name="photos[]" multiple>
                 <h3>Ingredients <span class="red">*</span></h3>
+                    <p class="red"><i>One ingredient per line.</i></p>
                     <textarea required id="added-ingredients" name="added-ingredients" value=""></textarea>
                 <h3>Steps <span class="red">*</span></h3>
                 <fieldset id = "steps-fieldset">

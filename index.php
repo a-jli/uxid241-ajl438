@@ -40,27 +40,12 @@
     <main>
 
         <div class="search-filter-wrapper">
-
-            <!-- <div>
-            <h2>Filter By:</h2>
-            <form action="index.php" method = "GET">
-            <select class="dropdown" name="protein" onchange="">
-                <option value="">All</option>
-                <option value="1">Vegetarian</option>
-                <option value="2">Fish</option>
-                <option value="3">Poultry</option>
-                <option value="4">Pork</option>
-                <option value="5">Beef</option>
-            </select>
-            <button type="submit">Filter</button>
-            </form>
-            </div> -->
-            
             <div>
             <h2>Search and Filter:</h2>
             <form action="index.php" method = "GET"> 
                 <input type= "search" id="q" name="q" value="<?= e($food_searched) ?>">
                 <select class="dropdown" name="protein" id = "protein">
+                    <!-- TODO save dropdown input -->
                     <option value="">All</option>
                     <option value="1">Vegetarian</option>
                     <option value="2">Fish</option>
@@ -88,6 +73,7 @@
                                 <h4 class="subtitle"><?= e($food_result['subtitle']) . '<br>'; ?></h4> 
                                 <div class="recipe-wrapper-pill">
                                     <p class="category"><?= e($food_result['category']); ?></p> 
+                                    <p class="servings"><?= ($food_result['servings']);?>cal</p>
                                     <p class="calories"><?= ($food_result['calories']);?>cal</p>
                                     <p class="time"><?= ($food_result['time']); ?> min</p>
                                 </div>
@@ -101,8 +87,26 @@
             <p>filtering only!</p>
             <div class="recipes-grid">
             <?php $food_results = filter_recipe($conn, $food_filtered);?>
-            <?php foreach ($filter_results as $filter_result):?>
-                    <p><?= e($filter_result['title']); ?></p>
+            <?php foreach ($food_results as $food_result):?>
+                    <?php $images = explode ('*', $food_result['images']);?>
+                    <div class="recipe-wrapper"> 
+                        <div class="recipe-header">
+                            <div class="recipe-header-img">
+                                <img src="assets/images/<?= e(end($images)) ?>" alt="">
+                            </div>
+                            <div class="non-img">
+                                <h3 class="title"><?= e($food_result['title']) . '<br>'; ?></h3> 
+                                <h4 class="subtitle"><?= e($food_result['subtitle']) . '<br>'; ?></h4> 
+                                <div class="recipe-wrapper-pill">
+                                    <p class="category"><?= e($food_result['category']); ?></p> 
+                                    <p class="servings"><?= ($food_result['servings']);?>cal</p>
+                                    <p class="calories"><?= ($food_result['calories']);?>cal</p>
+                                    <p class="time"><?= ($food_result['time']); ?> min</p>
+                                </div>
+                            </div>
+                        </div>  
+                        <a class="view-recipe-btn" href="recipe.php?id=<?= $food_result['id']?>">View Recipe</a>
+                    </div>
                 <?php endforeach; ?>    
             </div>
         <?php elseif ($food_searched !== '' && $food_filtered !== ''):?>
@@ -122,6 +126,7 @@
                                 <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
                                 <div class="recipe-wrapper-pill">
                                     <p class="category"><?= e($recipe['category']); ?></p> 
+                                    <p class="servings"><?= ($recipe['servings']);?> Servings</p>
                                     <p class="calories"><?= e($recipe['calories']);?>cal</p>
                                     <p class="time"><?= e($recipe['time']); ?> min</p>
                                 </div>
@@ -141,6 +146,8 @@
 <!-- 
 TODO:
 - [] filter feature
-- [] full edit and submit recipe
+- [DONE] full edit 
+- [DONE] submit recipe
 - [] upload all images
+- [] delete confirm
 -->

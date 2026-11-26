@@ -41,9 +41,6 @@ return mysqli_stmt_get_result($statement);
 }
 }
 
-var_dump($_GET);
-var_dump($_POST);
-
 function e(string $value): string { 
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); 
 } 
@@ -94,6 +91,30 @@ $filter_results = [];
 
 echo 'filtered category $food_filtered is ' . $food_filtered;
 
+function find_recipes(mysqli $conn, string $q, int $category_id): array {
+  $sql = 'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle,
+      cookbook_categories.name AS category, calorie, time, images
+    FROM cookbook_recipes
+    INNER JOIN cookbook_categories
+      ON cookbook_recipes.category_id = cookbook_categories.id
+    WHERE 1 = 1'; //always true so every condition starts w/ and
+  $parameters = [];
+
+  if (q !== '') { //searching by title, sub, or desc
+    $sql .= 'AND (cookbook_recipes.title LIKE ? OR cookbook_recipes.subtitle LIKE ? OR cookbook_recipes.description LIKE ?)';
+    $like = '%' . $q . '%';
+    $parameters[] =  $like;
+    $parameters[] =  $like;
+    $parameters[] =  $like;
+  }
+  if ($category_id > 0) {
+    $sql .= 'AND cookbook_recpes.category_id = ?';
+    $parameters[] = $category_id;
+  }
+
+  $sql .= ' ORDER BY cookbook_recipes.id ASC';
+  return mysqli_fetch_all(mysqli_execute_query($conn, $sql, $parameters), MYSQLI_ASSOC);
+}
 
 function search_recipe (mysqli $conn, string $q):array {
     $like = '%' . $q . '%';
@@ -123,13 +144,10 @@ function filter_recipe (mysqli $conn, string $protein):array {
         FROM cookbook_recipes
         INNER JOIN cookbook_categories
         ON cookbook_recipes.category_id = cookbook_categories.id
-      WHERE cookbook_recipes.category_id LIKE ?
+      WHERE cookbook_recipes.category_id = ?
       ORDER BY cookbook_recipes.id ASC',
       [$like]
     );
-    // foreach($filter_results as $row) {
-    //   print_r($row);
-    // }//this does give all the recipes by category, so im unsure why the actual thing isnt working...
     return mysqli_fetch_all($filter_results, MYSQLI_ASSOC);
 }
 
@@ -140,7 +158,6 @@ function create_recipe(mysqli $conn,
     string $subtitle, 
     string $description, 
     string $ingredients,
-    //Argument #5 ($ingredients) must be of type string, int given???
     int $category_id, 
     int $servings, 
     int $time, 
@@ -167,11 +184,40 @@ function create_recipe(mysqli $conn,
 //     [$addedTitle, $addedSubtitle, $addedDescription, $addedCategory]
 // );
 
-function update_recipe(mysqli $conn, int $id, string $title, string $subtitle, string $description): void {
+function update_recipe(
+  mysqli $conn, $id,
+    string $title, 
+    string $subtitle, 
+    string $description, 
+    string $ingredients,
+    int $category_id, 
+    int $servings, 
+    int $time, 
+    int $calories,
+): void {
   $sql = 'UPDATE cookbook_recipes 
-  SET title = ?, subtitle = ?, description = ? WHERE id = ?';
-  mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $id]);
+  SET 
+  title = ?, 
+  subtitle = ?, 
+  description = ?,
+  ingredients = ?,
+  category_id = ?,
+  servings = ?,
+  time = ?,
+  calories = ?
+    WHERE id = ?';
+  // Uncaught mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails 
+  // (`idm232_db`.`cookbook_recipes`, CONSTRAINT `category` FOREIGN KEY (`category_id`) REFERENCES `cookbook_categories` (`id`))
+  mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $ingredients, $category_id, $servings, $time, $calories, $id]);
 }
+
+// function update_recipe(mysqli $conn, 
+// int $id, string $title, string $subtitle, string $description): void {
+//   $sql = 'UPDATE cookbook_recipes 
+//   SET title = ?, subtitle = ?, description = ?\
+//   WHERE id = ?';
+//   mysqli_execute_query($conn, $sql, [$title, $subtitle, $description, $id]);
+// }
 
 function delete_recipe(mysqli $conn, int $id): void {
   mysqli_execute_query($conn, 'DELETE FROM cookbook_recipes WHERE id = ?', [$id]);
@@ -186,6 +232,10 @@ function add_images (mysqli $conn, int $id, string $images): void {
   $sql = 'UPDATE cookbook_recipes SET images = ? WHERE id = ?';
   mysqli_execute_query($conn, $sql, [$images, $id]);
 }
+
+
+
+
 
 // image upload
 function save_upload (
