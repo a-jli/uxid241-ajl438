@@ -275,9 +275,8 @@
                         </div>  
                         <div class="horizontal button-wrapper">
                             <a class="view-recipe-btn" href="edit.php?id=<?= e($recipe['id'])?>">Edit</a>
-                            <form class="delete-form" method = "post" > 
-                                <input class="none" type="text" id="form" name="form" value="delete" 
-                                    onsubmit="return confirm('Delete recipe <?= e($recipe['title']) ?> (<?= e($recipe['id']) ?>?');)">
+                            <form class="delete-form" method = "post" onsubmit="return confirm('Delete recipe <?= e($recipe['title']) ?> (<?= e($recipe['id']) ?>?');)" > 
+                                <input class="none" type="text" id="form" name="form" value="delete">
                                     <!-- doesnt confirm, its no longer a hidden input? -->
                                     <input type="hidden" id="delete-id" name="delete-id" value="<?= e($recipe['id'])?>">
                                 <button type="submit" class="delete-btn">Delete</button>
