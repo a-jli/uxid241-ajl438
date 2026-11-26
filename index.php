@@ -11,7 +11,6 @@
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
 
-
 ?>
 
 <!DOCTYPE html>
@@ -40,10 +39,14 @@
     <main>
 
         <div class="search-filter-wrapper">
-            <div>
-            <h2>Search and Filter:</h2>
-            <form action="index.php" method = "GET"> 
+           
+            <form action="index.php" method = "GET">
+                <div> 
+                <h3>Search:</h3>
                 <input type= "search" id="q" name="q" value="<?= e($food_searched) ?>">
+                </div>
+                <div>
+                <h3>Filter:</h3>
                 <select class="dropdown" name="protein" id = "protein">
                     <!-- TODO save dropdown input -->
                     <option value="">All</option>
@@ -53,9 +56,10 @@
                     <option value="4">Pork</option>
                     <option value="5">Beef</option>
                 </select>
+                </div>
                 <button type="submit">Find Recipe</button>
             </form>                
-            </div>
+            
         </div>
         <?php if ($food_searched !== '' && $food_filtered === '') : ?>
             <p>searching only!</p>
@@ -99,7 +103,7 @@
                                 <h4 class="subtitle"><?= e($food_result['subtitle']) . '<br>'; ?></h4> 
                                 <div class="recipe-wrapper-pill">
                                     <p class="category"><?= e($food_result['category']); ?></p> 
-                                    <p class="servings"><?= ($food_result['servings']);?>cal</p>
+                                    <p class="servings"><?= ($food_result['servings']);?> Servings</p>
                                     <p class="calories"><?= ($food_result['calories']);?>cal</p>
                                     <p class="time"><?= ($food_result['time']); ?> min</p>
                                 </div>
@@ -112,7 +116,7 @@
         <?php elseif ($food_searched !== '' && $food_filtered !== ''):?>
             <p>filtering and searching!</p>
         <?php else: ?>
-            <p>all recipes!</p>
+            <p>All recipes!</p>
             <div class="recipes-grid">
                 <?php foreach ($recipes as $recipe):?>
                     <?php $images = explode ('*', $recipe['images']);?>
@@ -126,7 +130,7 @@
                                 <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4> 
                                 <div class="recipe-wrapper-pill">
                                     <p class="category"><?= e($recipe['category']); ?></p> 
-                                    <p class="servings"><?= ($recipe['servings']);?> Servings</p>
+                                    <p class="servings">Serves <?= e($recipe['servings']);?></p>
                                     <p class="calories"><?= e($recipe['calories']);?>cal</p>
                                     <p class="time"><?= e($recipe['time']); ?> min</p>
                                 </div>

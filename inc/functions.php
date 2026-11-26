@@ -89,7 +89,7 @@ $food_filtered = value_trim('protein');
 $food_results = []; 
 $filter_results = []; 
 
-echo 'filtered category $food_filtered is ' . $food_filtered;
+// echo 'filtered category $food_filtered is ' . $food_filtered;
 
 function find_recipes(mysqli $conn, string $q, int $category_id): array {
   $sql = 'SELECT cookbook_recipes.id, cookbook_recipes.title, subtitle,
@@ -148,6 +148,7 @@ function filter_recipe (mysqli $conn, string $protein):array {
       ORDER BY cookbook_recipes.id ASC',
       [$like]
     );
+
     return mysqli_fetch_all($filter_results, MYSQLI_ASSOC);
 }
 

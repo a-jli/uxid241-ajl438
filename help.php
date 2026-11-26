@@ -26,19 +26,22 @@
         </div>
     </nav>
     <main>
-        <div class="recipe-wrapper">
-            <div class="text-wrapper">
+        <br><br> 
+        <div class="text-wrapper">
+            <div class="recipe-wrapper smallgap">
                 <h1>Help</h1>
-                <p>This Cookbook allows you to browse, search, and filter 
+                <h3>This cookbook allows you to browse, search, and filter 
                     recipes. You can also generate a random recipe if you're 
-                    looking for a suprise!</p>
-
-                <h2>Browse Recipes</h2>
+                    looking for a surprise!</h3>
+                <br>
+                <h3>Browse Recipes</h3>
                 <p>The home page shows a selection of recipes and a pick of the day.</p>
-                <p>To look at recipe details, click on the "View Recipe" button.</p>                
-                <h2>Search Recipes</h2>
+                <p>To look at recipe details, click on the "View Recipe" button.</p>    
+                <br>            
+                <h3>Search Recipes</h3>
                 <p>The search bar can be used to look up recipes by the dish name the ingredients.</p>
-                <h2>Filter Recipes</h2>
+                <br>
+                <h3>Filter Recipes</h3>
                 <p>The filter dropdown can be used to filter the recipes by protein type:</p>
                 <ul>
                     <li>Vegetarian</li>
@@ -47,8 +50,8 @@
                     <li>Pork</li>
                     <li>Beef</li>
                 </ul>
-                
-                <h2>Surprise Recipe</h2>
+                <br>
+                <h3>Surprise Recipe</h3>
                 <p>The Surprise Me page will display a random recipe.</p>
             </div>
         </div>

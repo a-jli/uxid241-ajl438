@@ -18,7 +18,6 @@
     } elseif ($recipe['category'] === 'Beef') {
          $categoryNumber = 5;
     } else {
-         $categoryNumber = 'Something Else?';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -159,6 +158,7 @@
                                 <h4 class="subtitle"><?= e($recipe['subtitle']) . '<br>'; ?></h4>
                                 <div class="recipe-wrapper-pill">
                                 <p class="category"><?= e($recipe['category']); ?></p>
+                                <p class="servings">Serves <?= ($recipe['servings']);?></p>
                                 <p class="calories"><?= (string) $recipe['calories'];?>cal</p> 
                                 <p class="time"><?= (string) $recipe['time']; ?> min</p>
                             </div>

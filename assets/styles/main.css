@@ -9,7 +9,7 @@
      --off-black:  #0a0907;
      --green: rgb(209, 206, 191);
      --yellow: rgb(255, 187, 0);
-     --light-orange: rgb(232, 130, 29);
+     --light-orange: rgb(255, 143, 32);
      --orange: rgb(206, 102, 27);
      --darker-orange: rgb(164, 57, 18); 
      --darkest-orange:rgb(116, 30, 11); 
@@ -88,6 +88,8 @@ main {
     align-items: center;
     width: 100%;
     background-color: var(--green);
+    min-height: 80vh;
+    height: 100%;
 }
 
 .recipes-grid.fullwide {
@@ -181,20 +183,20 @@ textarea {
 }
 form {
     display: flex;
-    gap: 0;
+    gap: 1rem;
     margin: 0;
+    width: 100%;
     input {
         margin: 0;
-        border-radius: 0.5rem 0 0 0.5rem;
+        border-radius: 0.5rem;
     }
-    .flip {
-        border-radius:  0;
-    }
+
     button {
         margin: 0;
-        border-radius: 0rem 0.5rem 0.5rem 0;
+        border-radius: 0.5rem;
         background-color: var(--yellow);
         transition: 200ms ease-out;
+        font-weight: bold;
     }
     button:hover {
         cursor: pointer;
@@ -204,6 +206,18 @@ form {
         cursor: pointer;
         color: white;
         background-color: var(--darker-orange);
+    }
+}
+
+.no-gap {
+    gap: 0;
+    input {
+        border-radius: 0.5rem 0rem 0rem 0.5rem;
+    }
+    .flip {
+        border-radius:  0;
+        border-left: 0.25rem solid var(--off-white);
+        border-right: 0.25rem solid var(--off-white);
     }
 }
 
@@ -358,7 +372,12 @@ button.submit-btn {
     gap: 1rem;
     ul {
         width: 100%;
+        margin: 0;
     }
+}
+
+.smallgap {
+    gap: 0.25rem;
 }
 
 .hero-image {
@@ -424,7 +443,7 @@ button.submit-btn {
     }
     .time, .calories, .category, .servings {
         background-color: var(--light-orange);
-        color: var(--darkest-orange);
+        color: var(--darker-orange);
         padding: 0.5rem;
         border-radius: 0.5rem;
         font-size: 0.75rem;

@@ -48,14 +48,19 @@
         </div>
     </nav>
     <main>
-        <div class="text-wrapper">
+        <br><br>
+        <div class="text-wrapper">        
+            <div class="recipe-wrapper smallgap">
+        <br>
         <h1>Register</h1>
         <br>
-        <form method = "post">
+        <form class="no-gap" method = "post">
             <input type="email" name="email" placeholder="email" required>
             <input class="flip" type="password" name="password" placeholder="password" required>
             <button class="left-flat" type="submit">Submit</button>
-        </form>   
+        </form> 
+        <br>  
+        </div>
         </div>
 
 

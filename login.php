@@ -55,10 +55,13 @@
         </div>
     </nav>
     <main>
-
-        <div class="text-wrapper">
+        <br><br>
+        <div class="text-wrapper">        
+            <div class="recipe-wrapper smallgap">
+            <br>
             <h1>Login</h1>
-        <form method = "post">
+            <br>
+            <form class="no-gap" method = "post">
                 <input type="email" name="email" placeholder="email" required>
                 <input class="flip" type="password" name="password" placeholder="password" required>
                 <button class="left-flat" type="submit">Submit</button>
@@ -68,6 +71,7 @@
             <?php if (!empty($error)): ?>
                 <p><?= e($error)?> </p>
             <?php endif?>
+        </div>
         </div>
 
     </main>
