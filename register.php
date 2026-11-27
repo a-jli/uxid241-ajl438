@@ -20,6 +20,9 @@
             $error = 'That email is already registered.';
         }
         }
+
+$root = '';
+require 'inc/header.php';
 ?>
 
 
@@ -35,18 +38,7 @@
     <link rel="stylesheet" href="assets/styles/main.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="index.php"><h1>IDM 232 Cookbook</h2></li></a>
-            <ul>
-                <li><a href="index.php">HOME</a></li>
-                <li><a href="all-recipes.php">ALL RECIPES</a></li>
-                <li><a href="surprise.php">SUPRPISE ME</a></li>
-                <li><a href="help.php">HELP</a></li>
-                <li><a href="login.php">LOGIN</a></li>
-            </ul>
-        </div>
-    </nav>
+
     <main>
         <br><br>
         <div class="text-wrapper">        
@@ -54,12 +46,15 @@
         <br>
         <h1>Register</h1>
         <br>
-        <form class="no-gap" method = "post">
+        <form class="no-gap register-login" method = "post">
             <input type="email" name="email" placeholder="email" required>
             <input class="flip" type="password" name="password" placeholder="password" required>
             <button class="left-flat" type="submit">Submit</button>
         </form> 
         <br>  
+        <?php if (!empty($error)): ?>
+            <p class="red centered"><?= e($error) ?></p>
+        <?php endif; ?>
         </div>
         </div>
 

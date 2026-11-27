@@ -11,18 +11,8 @@
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
 
-    $min = 1;
-    $max = 40;
-    $randomId = rand($min, $max);
-
-    $getRandomId = mysqli_query($conn, 
-    'SELECT cookbook_recipes.id 
-    FROM cookbook_recipes 
-    ORDER BY RAND() LIMIT 1');
-
-    $randomId = mysqli_fetch_all($getRandomId, MYSQLI_ASSOC);
-    print_r($randomId);
-    //Undefined array key "id"???
+    $root = '';
+    require 'inc/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -36,18 +26,6 @@
     <link rel="stylesheet" href="assets/styles/main.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="index.php"><h1>IDM 232 Cookbook</h1></a>
-            <hr class="hidden-hr">
-            <ul>
-                <li><a href="index.php">HOME</a></li>
-                <li><a href="recipe.php?id=<?=$randomId['id']?>">SUPRPISE ME</a></li>
-                <li><a href="help.php">HELP</a></li>
-                <li><a href="login.php">LOGIN</a></li>
-            </ul>
-        </div>
-    </nav>
     <main>
 
         <div class="search-filter-wrapper">   
@@ -59,18 +37,18 @@
                 <div>
                 <h3>Filter:</h3>
                 <select class="dropdown" name="protein" id = "protein">
-                    <!-- TODO save dropdown input -->
-                    <option value="">All</option>
-                    <option value="1">Vegetarian</option>
-                    <option value="2">Fish</option>
-                    <option value="3">Poultry</option>
-                    <option value="4">Pork</option>
-                    <option value="5">Beef</option>
+                    <option value="" <?php if ($food_filtered === 0) echo ' selected'; ?> >All</option>
+                    <option value="1" <?php if ($food_filtered === 1) echo ' selected'; ?> >Vegetarian</option>
+                    <option value="2" <?php if ($food_filtered === 2) echo ' selected'; ?> >Fish</option>
+                    <option value="3" <?php if ($food_filtered === 3) echo ' selected'; ?> >Poultry</option>
+                    <option value="4" <?php if ($food_filtered === 4) echo ' selected'; ?> >Pork</option>
+                    <option value="5"> <?php if ($food_filtered === 5) echo ' selected'; ?> Beef</option>
                 </select>
                 </div>
                 <button type="submit">Find Recipe</button>
             </form>    
-        </div>           
+        </div>          
+
             <?php $food_results = find_recipe($conn, $food_searched, $food_filtered);?>
             <?php if (empty($food_results)): ?>
                 <div class="text-wrapper">
@@ -91,7 +69,7 @@
                                 <h4 class="subtitle"><?= e($food_result['subtitle']) . '<br>'; ?></h4> 
                                 <div class="recipe-wrapper-pill">
                                     <p class="category"><?= e($food_result['category']); ?></p> 
-                                    <p class="servings"><?= ($food_result['servings']);?>cal</p>
+                                    <p class="servings">Serves <?= ($food_result['servings']);?></p>
                                     <p class="calories"><?= ($food_result['calories']);?>cal</p>
                                     <p class="time"><?= ($food_result['time']); ?> min</p>
                                 </div>
@@ -103,19 +81,6 @@
             </div>
             <?php endif ?>
     </main>
-    <script src="../assets/script.js"></script>
+    <script src="assets/script.js"></script>
 </body>
 </html>
-
-<!-- 
-TODO:
-- [DONE] filter feature
-- [DONE] full edit 
-- [DONE] submit recipe
-- [] upload all images
-- [] delete confirm
-- [] index dropdown staying
-- [] prevent duplicate email submissions?
-- [] undefined array key id for randomrecipe
-- [] using php to repeat header/footers?
--->

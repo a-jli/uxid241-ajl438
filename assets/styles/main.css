@@ -91,6 +91,7 @@ main {
     background-color: var(--green);
     min-height: 80vh;
     height: 100%;
+    padding-bottom: 1rem;
 }
 
 .recipes-grid.fullwide {
@@ -102,6 +103,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 1rem 0 1rem;
     .edit-recipe-form, .add-recipe-form {
         display: flex;
         flex-direction: column;
@@ -132,7 +134,11 @@ main {
 
 }
 
-
+.sideline {
+    width: 100%;
+    border-left: 0.25rem solid var(--yellow);
+    padding-left: 0.5rem;
+}
 
 .search-filter-wrapper {
     display: flex;
@@ -156,7 +162,7 @@ main {
     background-color: var(--yellow);
     transition: 200ms ease-out;
     font-weight: bolder;
-    width: 80%;
+    width: auto;
     text-align: center;
     margin-bottom: 1rem;
 }
@@ -215,6 +221,7 @@ form {
     justify-content: center;
     input {
         border-radius: 0.5rem 0rem 0rem 0.5rem;
+        background-color: white;
     }
     .flip {
         border-radius:  0;
@@ -279,7 +286,13 @@ form {
     padding: 1rem 1rem 1rem 1rem;
 }
 
+.semiwide {
+    width: 100%;
+}
 
+.lesswide {
+    width: 12rem;
+}
 
 .horizontal {
     width: 100%;
@@ -384,6 +397,10 @@ button.submit-btn {
         text-align: center;
     }
 }
+p.smallgap, textarea.smallgap, input.smallgap {
+    margin-top: -0.25rem;
+}
+
 .centered {
     text-align: center;
 }

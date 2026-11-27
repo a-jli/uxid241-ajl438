@@ -4,6 +4,9 @@
     require 'inc/functions.php'; 
     $id = (int) get_value('id');
     $recipe = get_recipe($conn, $id);
+
+$root = '';
+require 'inc/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -17,18 +20,6 @@
     <link rel="stylesheet" href="assets/styles/main.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="index.php"><h1>IDM 232 Cookbook</h1></a>
-            <ul>
-                <li><a href="index.php">HOME</a></li>
-                <li><a href="index.php">ALL RECIPES</a></li>
-                <li><a href="index.php">SUPRPISE ME</a></li>
-                <li><a href="index.php">HELP</a></li>
-                <li><a href="index.php">LOGIN</a></li>
-            </ul>
-        </div>
-    </nav>
     <main>
         <div class="recipe-focus">
             <?php if ($recipe === null): ?>

@@ -53,7 +53,8 @@
         exit;
         }
 
-
+$root = '../';
+require '../inc/header.php';
     
 ?>
 
@@ -68,19 +69,6 @@
     <link rel="stylesheet" href="../assets/styles/main.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="index.php"><h1>IDM 232 Cookbook</h2></li></a>
-            <ul>
-                <li><a href="../index.php">HOME</a></li>
-                <li><a href="../all-recipes.php">ALL RECIPES</a></li>
-                <li><a href="../surprise.php">SUPRPISE ME</a></li>
-                <li><a href="../help.php">HELP</a></li>
-                <li><a href="../login.php">LOGIN</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main>
     <main>
         <div class="text-wrapper">
             <br>
@@ -96,9 +84,7 @@
                 <h3>Subtitle</h3>
                 <input type= "text" id="subtitle" name="subtitle" value="<?= e($recipe['subtitle']) ?>">
                 <h3>Description</h3>
-                <textarea type= "text" id="desc" name="desc">
-<?= e($recipe['description']) ?>
-                </textarea>
+                <textarea type= "text" id="desc" name="desc"><?= e($recipe['description']) ?></textarea>
                 <h3>Category <span class="red">*</span></h3>
                 <select name="category" id="category">
                     <option value="<?=$categoryNumber?>"><?=$recipe['category']?></option>
@@ -109,6 +95,7 @@
                     <option value="4">Pork</option>
                     <option value="5">Beef</option>
                 </select>
+
                 <div class="horizontal">
                     <div>
                         <h3>Servings <span class="red">*</span></h3>
@@ -116,7 +103,7 @@
                     </div>
                     <div>
                         <h3>Time<span class="red">*</span></h3>
-                            <input type= "number" min="1" max="240" id="time" name="time" value="<?= $recipe['time'] ?>">
+                        <input type= "number" min="1" max="240" id="time" name="time" value="<?= $recipe['time'] ?>">
                     </div>
                     <div>
                         <h3>Calories <span class="red">*</span></h3>
@@ -125,21 +112,15 @@
                 </div>
                 <h3>Ingredients <span class="red">*</span></h3>
                     <p class="red"><i>One ingredient per line.</i></p>
-                    <textarea required id="ingredients" name="ingredients"><?php $ingredients = explode ("*", $recipe['ingredients']); ?>
-<?php foreach ($ingredients as $ingredient): ?>
-<?= e($ingredient);?>
-
-<?php endforeach; ?></textarea>
-
+                    <?php $ingredients_text = implode("\n", explode("*", $recipe['ingredients'])); ?>
+                    <textarea required id="ingredients" name="ingredients"><?= e($ingredients_text) ?></textarea>
                 <h3>Steps</h3>
                 <fieldset id = "steps-fieldset">
                     <?php $steps = explode ('*', $recipe['steps']);?>
                     <?php foreach ($steps as $i => $step): ?>
                         <div class="steps-wrapper edit-page">
                             <label class="step-number smaller" >Step <?=$i + 1?></label>
-                            <textarea type= "text" id="step-<?= $i + 1?>" name="step[]">
-<?= e($step) ?>
-                            </textarea>
+                            <textarea type= "text" id="step-<?= $i + 1?>" name="step[]"><?= e($step) ?></textarea>
                         </div>
                     <?php endforeach; ?>
                 </fieldset>

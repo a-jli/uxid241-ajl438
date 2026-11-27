@@ -21,7 +21,6 @@
                 $addedTime = post_value('added-time');
                 $addedCalories = post_value('added-calories');
                 $addedIngredients = post_value('added-ingredients');
-                    // ingredients
                     $lines = preg_split('/\R/', $addedIngredients);
                     $lines = array_filter(array_map('trim', $lines));
                     $ingredients = implode('*', $lines);
@@ -142,7 +141,8 @@
             default:
         }
         }
-
+$root = '../';
+require '../inc/header.php';
 
 ?>
 
@@ -158,23 +158,6 @@
     <link rel="stylesheet" href="../assets/styles/main.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="index.php"><h1>IDM 232 Cookbook</h2></li></a>
-            <ul>
-                <li><a href="../index.php">HOME</a></li>
-                <li><a href="../all-recipes.php">ALL RECIPES</a></li>
-                <li><a href="../surprise.php">SUPRPISE ME</a></li>
-                <li><a href="../help.php">HELP</a></li>
-                <li><a href="../login.php">LOGIN</a></li>
-            </ul>
-        </div>
-    </nav>
-    <?php
-    // echo '<pre>';
-    // print_r($_FILES);
-    // echo '</pre>';
-    ?>
     <main>
         <div class="text-wrapper">
             <br>
@@ -184,13 +167,13 @@
             <br>
             <form class="add-recipe-form" method = "post" enctype = "multipart/form-data"> 
                 <h3>Title <span class="red">*</span></h3>
-                <input type= "text" id="added-title" name="added-title" value="">
+                <input required type= "text" id="added-title" name="added-title" value="">
                 <h3>Subtitle <span class="red">*</span></h3>
-                <input type= "text" id="added-subtitle" name="added-subtitle" value="">
+                <input required type= "text" id="added-subtitle" name="added-subtitle" value="">
                 <h3>Description <span class="red">*</span></h3>
-                <input type= "text" id="added-desc" name="added-desc" value="">
+                <input required type= "text" id="added-desc" name="added-desc" value="">
                 <h3>Category <span class="red">*</span></h3>
-                <select name="added-category" id="added-category" value="">
+                <select required name="added-category" id="added-category" value="">
                     <option value="1">Vegetarian</option>
                     <option value="2">Fish</option>
                     <option value="3">Poultry</option>
@@ -200,23 +183,23 @@
                 <div class="horizontal">
                     <div>
                         <h3>Servings <span class="red">*</span></h3>
-                        <input type= "number" min="1" max="12" id="added-servings" name="added-servings" value="">
+                        <input required type= "number" min="1" max="12" id="added-servings" name="added-servings" value="">
                     </div>
                     <div>
                         <h3>Time<span class="red">*</span></h3>
-                            <input type= "number" min="1" max="240" id="added-time" name="added-time" value="">
+                            <input required type= "number" min="1" max="240" id="added-time" name="added-time" value="">
                     </div>
                     <div>
                         <h3>Calories <span class="red">*</span></h3>
-                        <input type= "number" min="100" max="2000" id="added-calories" name="added-calories" value="">
+                        <input required type= "number" min="100" max="2000" id="added-calories" name="added-calories" value="">
                     </div>
                 </div>
                 <h3>Images</h3>
-                    <p class="red"><i>Please upload one image per step, with the last image being the completed meal.</i></p>
-                    <input type="file" name="photos[]" multiple>
+                    <p class="red smallgap"><i>Please upload one image per step, with the last image being the completed meal.</i></p>
+                    <input class="smallgap" type="file" name="photos[]" multiple>
                 <h3>Ingredients <span class="red">*</span></h3>
-                    <p class="red"><i>One ingredient per line.</i></p>
-                    <textarea required id="added-ingredients" name="added-ingredients" value=""></textarea>
+                    <p class="red smallgap"><i>One ingredient per line.</i></p>
+                    <textarea class="smallgap" required id="added-ingredients" name="added-ingredients" value=""></textarea>
                 <h3>Steps <span class="red">*</span></h3>
                 <fieldset id = "steps-fieldset">
                     <div>
@@ -230,25 +213,26 @@
                     <button type="submit">Submit</button>
                     <br>
                 </div>
+                <div class="smallgap">
+                    <?php if ($results !== null) : ?>
+                        <?php foreach ($results as $result): ?>
+                            <p class="centered">
+                                <?= e($result['name'])?>
+                                <?= e($result['message'])?>
+                            </p>
+                        <?php endforeach ?>
+                    <?php endif?>
+                    <?php if (!empty($error)): ?>
+                        <p class="red"><strong><?= e($error)?></strong> </p>
+                    <?php endif?>
+                    <?php foreach ($errors as $error) : ?>
+                        <p class="red"><?= ($error);?></p>
+                    <?php endforeach; ?>
+            </div>
             </form>
-            <?php if ($results !== null) : ?>
-                <?php foreach ($results as $result): ?>
-                    <br>
-                    <p>
-                        <?= e($result['name'])?>
-                        <?= e($result['message'])?>
-                    </p>
-                <?php endforeach ?>
-            <?php endif?>
-            <br>
-            <?php if (!empty($error)): ?>
-                <p class="red"><strong><?= e($error)?></strong> </p>
-            <?php endif?>
-            <?php foreach ($errors as $error) : ?>
-                <p class="red"><?= ($error);?></p>
-            <?php endforeach; ?>
-            <?php 
 
+
+            <?php 
             $recipe = get_recipe($conn, $id);
                 if ($recipe && $recipe['steps']):
             ?>
@@ -274,10 +258,9 @@
                             </div>
                         </div>  
                         <div class="horizontal button-wrapper">
-                            <a class="view-recipe-btn" href="edit.php?id=<?= e($recipe['id'])?>">Edit</a>
-                            <form class="delete-form" method = "post" onsubmit="return confirm('Delete recipe <?= e($recipe['title']) ?> (<?= e($recipe['id']) ?>?');)" > 
+                            <a class="view-recipe-btn semiwide" href="edit.php?id=<?= e($recipe['id'])?>">Edit</a>
+                            <form class="delete-form" method="post" onsubmit="return confirm('Delete this recipe?');">
                                 <input class="none" type="text" id="form" name="form" value="delete">
-                                    <!-- doesnt confirm, its no longer a hidden input? -->
                                     <input type="hidden" id="delete-id" name="delete-id" value="<?= e($recipe['id'])?>">
                                 <button type="submit" class="delete-btn">Delete</button>
                             </form>
@@ -286,9 +269,9 @@
                 <?php endforeach; ?>      
             </div>
             <?php if (!empty($deleteError)): ?>
-                <p><?= e($deleteError)?></p>
+                <p class="centered"><?= e($deleteError)?></p>
             <?php endif?>            
-            <a class="view-recipe-btn" href="../logout.php">Logout</a>
+            <a class="view-recipe-btn lesswide" href="../logout.php">Logout</a>
             <br>
         </div>
     </main>
